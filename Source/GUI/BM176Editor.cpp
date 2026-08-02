@@ -18,6 +18,7 @@ namespace bm176
         addAndMakeVisible(sidechainKnob);
 
         inputKnob.setIsBig(true);
+        inputKnob.setDiscrete(true, 21);
         inputKnob.setValue(5.0f);
         addAndMakeVisible(inputKnob);
 
@@ -46,6 +47,7 @@ namespace bm176
         addAndMakeVisible(vernierOutKnob);
 
         outputKnob.setIsBig(true);
+        outputKnob.setDiscrete(true, 21);
         outputKnob.setValue(5.0f);
         addAndMakeVisible(outputKnob);
 
