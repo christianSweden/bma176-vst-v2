@@ -24,6 +24,7 @@ namespace bm176
         void setDiscrete(bool isDiscrete, int numPositions = 11);
         void setCentreDetent(bool centre);
         void setVernierMode(bool vernier);
+        void setAngleRange(float minDeg, float maxDeg);
 
     protected:
         virtual float snapValue(float raw) const;
@@ -34,6 +35,8 @@ namespace bm176
         bool  isVernier   = false;
         int   numPositions = 11;
         bool  centreDetent = false;
+        float minAngleDeg  = -150.0f;
+        float maxAngleDeg  =  150.0f;
 
     private:
         float dragStartValue = 0.0f;

@@ -21,12 +21,14 @@ namespace bm176
     void BMKnob::setDiscrete(bool d, int n) { isDiscrete = d; numPositions = juce::jmax(2, n); }
     void BMKnob::setCentreDetent(bool c) { centreDetent = c; }
     void BMKnob::setVernierMode(bool v)   { isVernier = v; }
+    void BMKnob::setAngleRange(float minDeg, float maxDeg) { minAngleDeg = minDeg; maxAngleDeg = maxDeg; }
 
     float BMKnob::angleFromValue(float v) const
     {
         if (isVernier)
-            return v * 150.0f;
-        return (v - 5.0f) * 30.0f;
+            return v * maxAngleDeg;
+        const float range = maxAngleDeg - minAngleDeg;
+        return minAngleDeg + (v / 10.0f) * range;
     }
 
     float BMKnob::snapValue(float raw) const

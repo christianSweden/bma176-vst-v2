@@ -8,10 +8,12 @@ namespace bm176
         addAndMakeVisible(panel);
 
         ratioKnob.setDiscrete(true, 5);
+        ratioKnob.setAngleRange(-75.0f, 75.0f);
         ratioKnob.setValue(5.0f);
         addAndMakeVisible(ratioKnob);
 
         sidechainKnob.setDiscrete(true, 6);
+        sidechainKnob.setAngleRange(-90.0f, 90.0f);
         sidechainKnob.setValue(0.0f);
         addAndMakeVisible(sidechainKnob);
 
@@ -20,6 +22,7 @@ namespace bm176
         addAndMakeVisible(inputKnob);
 
         meterKnob.setDiscrete(true, 3);
+        meterKnob.setAngleRange(-60.0f, 60.0f);
         meterKnob.setValue(5.0f);
         addAndMakeVisible(meterKnob);
 
