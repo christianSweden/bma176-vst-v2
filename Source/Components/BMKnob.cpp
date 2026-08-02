@@ -22,6 +22,7 @@ namespace bm176
     void BMKnob::setCentreDetent(bool c) { centreDetent = c; }
     void BMKnob::setVernierMode(bool v)   { isVernier = v; }
     void BMKnob::setAngleRange(float minDeg, float maxDeg) { minAngleDeg = minDeg; maxAngleDeg = maxDeg; }
+    void BMKnob::setValueRange(float minV, float maxV) { minVal = minV; maxVal = maxV; }
 
     float BMKnob::angleFromValue(float v) const
     {
@@ -51,7 +52,7 @@ namespace bm176
         if (isVernier)
             newValue = juce::jlimit(-1.0f, 1.0f, snapValue(newValue));
         else
-            newValue = juce::jlimit(0.0f, 10.0f, snapValue(newValue));
+            newValue = juce::jlimit(minVal, maxVal, snapValue(newValue));
         if (!juce::approximatelyEqual(value, newValue))
         {
             value = newValue;

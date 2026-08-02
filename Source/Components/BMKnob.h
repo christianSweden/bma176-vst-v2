@@ -25,6 +25,7 @@ namespace bm176
         void setCentreDetent(bool centre);
         void setVernierMode(bool vernier);
         void setAngleRange(float minDeg, float maxDeg);
+        void setValueRange(float minV, float maxV);
 
     protected:
         virtual float snapValue(float raw) const;
@@ -37,6 +38,8 @@ namespace bm176
         bool  centreDetent = false;
         float minAngleDeg  = -150.0f;
         float maxAngleDeg  =  150.0f;
+        float minVal       = 0.0f;
+        float maxVal       = 10.0f;
 
     private:
         float dragStartValue = 0.0f;

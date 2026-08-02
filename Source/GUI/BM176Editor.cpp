@@ -39,7 +39,10 @@ namespace bm176
         interstageSwitch.setState(true);
         addAndMakeVisible(interstageSwitch);
 
-        attackKnob.setDiscrete(true, 11);
+        attackOffSwitch.setState(true);
+        addAndMakeVisible(attackOffSwitch);
+
+        attackKnob.setValueRange(2.0f, 10.0f);
         attackKnob.setValue(5.0f);
         addAndMakeVisible(attackKnob);
 
@@ -98,6 +101,7 @@ namespace bm176
         placeCircle(releaseKnob,   1734.0f,  88.0f, 82.0f);
 
         placeToggle(interstageSwitch, 1243.0f, 196.0f);
+        placeToggle(attackOffSwitch,  1243.0f, 268.0f);
         placeToggle(bypassSwitch,     1848.0f,  88.0f);
         placeToggle(powerSwitch,      1848.0f, 254.0f);
 
