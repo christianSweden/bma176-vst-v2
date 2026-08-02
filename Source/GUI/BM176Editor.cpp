@@ -39,6 +39,7 @@ namespace bm176
         interstageSwitch.setState(true);
         addAndMakeVisible(interstageSwitch);
 
+        attackKnob.setDiscrete(true, 11);
         attackKnob.setValue(5.0f);
         addAndMakeVisible(attackKnob);
 
