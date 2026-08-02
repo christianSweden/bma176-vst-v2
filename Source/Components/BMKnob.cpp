@@ -20,20 +20,24 @@ namespace bm176
     void BMKnob::setIsBig(bool b)    { isBig = b; }
     void BMKnob::setDiscrete(bool d, int n) { isDiscrete = d; numPositions = juce::jmax(2, n); }
     void BMKnob::setCentreDetent(bool c) { centreDetent = c; }
+    void BMKnob::setVernierMode(bool v)   { isVernier = v; }
 
     float BMKnob::angleFromValue(float v) const
     {
+        if (isVernier)
+            return v * 150.0f;
         return (v - 5.0f) * 30.0f;
-    }
-
-    float BMKnob::valueFromAngle(float angle) const
-    {
-        return juce::jlimit(0.0f, 10.0f, 5.0f + angle / 30.0f);
     }
 
     float BMKnob::snapValue(float raw) const
     {
-        if (!isDiscrete) return raw;
+        if (isVernier)
+        {
+            raw = juce::jlimit(-1.0f, 1.0f, raw);
+            if (std::abs(raw) < 0.15f) return 0.0f;
+            return raw;
+        }
+        if (!isDiscrete) return juce::jlimit(0.0f, 10.0f, raw);
         const int n = numPositions - 1;
         const int idx = juce::roundToInt(raw / 10.0f * static_cast<float>(n));
         return juce::jlimit(0.0f, 10.0f,
@@ -42,7 +46,10 @@ namespace bm176
 
     void BMKnob::setValue(float newValue)
     {
-        newValue = juce::jlimit(0.0f, 10.0f, snapValue(newValue));
+        if (isVernier)
+            newValue = juce::jlimit(-1.0f, 1.0f, snapValue(newValue));
+        else
+            newValue = juce::jlimit(0.0f, 10.0f, snapValue(newValue));
         if (!juce::approximatelyEqual(value, newValue))
         {
             value = newValue;
@@ -209,10 +216,10 @@ namespace bm176
         const float angle = angleDeg * DEG2RAD;
         const float ptrW = isBig ? 6.0f : 4.0f;
 
-        const float x1 = cx + R * 0.20f * std::cos(angle);
-        const float y1 = cy + R * 0.20f * std::sin(angle);
-        const float x2 = cx + R * 0.90f * std::cos(angle);
-        const float y2 = cy + R * 0.90f * std::sin(angle);
+        const float x1 = cx + R * 0.20f * std::sin(angle);
+        const float y1 = cy - R * 0.20f * std::cos(angle);
+        const float x2 = cx + R * 0.90f * std::sin(angle);
+        const float y2 = cy - R * 0.90f * std::cos(angle);
 
         juce::Path ptr;
         ptr.addLineSegment(juce::Line<float>(x1, y1, x2, y2), 0.0f);

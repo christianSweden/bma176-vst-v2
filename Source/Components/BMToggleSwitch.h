@@ -4,10 +4,11 @@
 
 namespace bm176
 {
-    class BMToggleSwitch : public juce::Component
+    class BMToggleSwitch : public juce::Component, private juce::Timer
     {
     public:
         BMToggleSwitch();
+        ~BMToggleSwitch() override;
 
         void paint(juce::Graphics& g) override;
         void resized() override;
@@ -17,9 +18,13 @@ namespace bm176
         void setState(bool up);
         bool getState() const;
 
+        void timerCallback() override;
+
     private:
         bool state = true;
-        float animLerp = 1.0f;
+        float animT = 1.0f;
+        float animTarget = 1.0f;
+        static constexpr float animDuration = 0.07f;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BMToggleSwitch)
     };

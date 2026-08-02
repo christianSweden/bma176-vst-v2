@@ -1,6 +1,7 @@
 #include "BMPanel.h"
 #include "../GUI/BM176Colours.h"
 #include "../GUI/BM176Geometry.h"
+#include "../GUI/BM176Fonts.h"
 
 namespace bm176
 {
@@ -91,16 +92,20 @@ namespace bm176
         drawSectionLabel(g, 1848.0f, 196.0f, 13.0f, "ON");
 
         juce::StringArray inputLabels;
-        for (int v = 40; v >= 0; v -= 4) inputLabels.add(juce::String(v));
         juce::StringArray inputAngles;
-        for (int v = 40; v >= 0; v -= 4) inputAngles.add(juce::String((static_cast<float>(v) - 20.0f) * 7.5f));
+        for (int v = 40; v >= 0; v -= 4) {
+            inputLabels.add(hwString(v));
+            inputAngles.add(juce::String((static_cast<float>(v) - 20.0f) * 7.5f));
+        }
         drawKnobScaleNumbers(g, 376.0f, 171.0f, 79.0f, inputLabels, inputAngles);
         drawKnobDots(g, 376.0f, 171.0f, 79.0f, 21, -150.0f, 150.0f);
 
         juce::StringArray outputLabels;
-        for (int v = 40; v >= 0; v -= 4) outputLabels.add(juce::String(v));
         juce::StringArray outputAngles;
-        for (int v = 40; v >= 0; v -= 4) outputAngles.add(juce::String((static_cast<float>(v) - 20.0f) * 7.5f));
+        for (int v = 40; v >= 0; v -= 4) {
+            outputLabels.add(hwString(v));
+            outputAngles.add(juce::String((static_cast<float>(v) - 20.0f) * 7.5f));
+        }
         drawKnobScaleNumbers(g, 1555.0f, 171.0f, 79.0f, outputLabels, outputAngles);
         drawKnobDots(g, 1555.0f, 171.0f, 79.0f, 21, -150.0f, 150.0f);
 
@@ -132,33 +137,18 @@ namespace bm176
     }
 
     void BMPanel::drawSectionLabel(juce::Graphics& g, float cx, float cy, float sizeH,
-                                   const juce::String& text)
+                                    const juce::String& text)
     {
-        juce::Font font(juce::FontOptions().withHeight(sizeH).withStyle("bold"));
-        juce::GlyphArrangement ga;
-        ga.addLineOfText(font, text.toUpperCase(), 0.0f, 0.0f);
-        float offset = 0.0f;
-        for (int i = 0, n = ga.getNumGlyphs(); i < n; ++i)
-        {
-            ga.getGlyph(i).moveBy(offset, 0.0f);
-            offset += 0.12f * sizeH;
-        }
-        juce::Rectangle<float> tb = ga.getBoundingBox(0, -1, true);
-        float dx = cx - tb.getCentreX();
-        float dy = cy - tb.getCentreY();
-        ga.moveRangeOfGlyphs(0, -1, dx, dy);
-
-        juce::Path shadowPath, mainPath;
-        ga.createPath(shadowPath);
-        g.setColour(textShadow.withAlpha(0.55f));
+        juce::Font font = resolveCondensedFont(sizeH);
+        bool needsScaling = !font.getTypefaceName().containsIgnoreCase("condensed")
+                         && !font.getTypefaceName().containsIgnoreCase("narrow");
         {
             juce::Graphics::ScopedSaveState ss(g);
-            g.addTransform(juce::AffineTransform::translation(0.0f, 1.0f));
-            g.fillPath(shadowPath);
+            if (needsScaling)
+                g.addTransform(juce::AffineTransform::scale(0.88f, 1.0f).translated(cx * 0.136f, 0.0f));
+            drawTrackedText(g, text.toUpperCase(), font, textMain.withAlpha(0.92f),
+                           cx, cy, 0.12f, textShadow.withAlpha(0.55f));
         }
-        ga.createPath(mainPath);
-        g.setColour(textMain.withAlpha(0.92f));
-        g.fillPath(mainPath);
     }
 
     void BMPanel::drawKnobScaleNumbers(juce::Graphics& g, float cx, float cy, float R,
@@ -299,27 +289,15 @@ namespace bm176
     void BMPanel::drawPanelText(juce::Graphics& g, float cx, float y, float size,
                                 const juce::String& text, float trackingEm)
     {
-        juce::Font font(juce::FontOptions().withHeight(size).withStyle("bold"));
-        juce::GlyphArrangement ga;
-        ga.addLineOfText(font, text.toUpperCase(), 0.0f, 0.0f);
-        float offset = 0.0f;
-        for (int i = 0, n = ga.getNumGlyphs(); i < n; ++i)
-        {
-            ga.getGlyph(i).moveBy(offset, 0.0f);
-            offset += trackingEm * size;
-        }
-        juce::Rectangle<float> tb = ga.getBoundingBox(0, -1, true);
-        ga.moveRangeOfGlyphs(0, -1, cx - tb.getCentreX(), y - tb.getCentreY());
-        juce::Path shadowPath, mainPath;
-        ga.createPath(shadowPath);
-        g.setColour(textShadow.withAlpha(0.55f));
+        juce::Font font = resolveCondensedFont(size);
+        bool needsScaling = !font.getTypefaceName().containsIgnoreCase("condensed")
+                         && !font.getTypefaceName().containsIgnoreCase("narrow");
         {
             juce::Graphics::ScopedSaveState ss(g);
-            g.addTransform(juce::AffineTransform::translation(0.0f, 1.0f));
-            g.fillPath(shadowPath);
+            if (needsScaling)
+                g.addTransform(juce::AffineTransform::scale(0.88f, 1.0f).translated(cx * 0.136f, 0.0f));
+            drawTrackedText(g, text.toUpperCase(), font, textMain.withAlpha(0.92f),
+                           cx, y, trackingEm, textShadow.withAlpha(0.55f));
         }
-        ga.createPath(mainPath);
-        g.setColour(textMain.withAlpha(0.92f));
-        g.fillPath(mainPath);
     }
 }

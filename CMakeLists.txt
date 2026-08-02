@@ -30,6 +30,7 @@ juce_add_plugin(BM176
     Source/GUI/BM176LookAndFeel.cpp
     Source/GUI/BM176Colours.h
     Source/GUI/BM176Geometry.h
+    Source/GUI/BM176Fonts.h
 
     Source/Components/BMPanel.h
     Source/Components/BMPanel.cpp
@@ -70,3 +71,7 @@ target_link_libraries(BM176 PUBLIC
 )
 
 target_compile_definitions(BM176 PUBLIC JUCE_VST3_CAN_REPLACE_VST2=0)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(BM176 PRIVATE -Wall -Wextra -Wpedantic)
+endif()

@@ -23,6 +23,7 @@ namespace bm176
         void setIsBig(bool big);
         void setDiscrete(bool isDiscrete, int numPositions = 11);
         void setCentreDetent(bool centre);
+        void setVernierMode(bool vernier);
 
     protected:
         virtual float snapValue(float raw) const;
@@ -30,6 +31,7 @@ namespace bm176
         float value = 0.5f;
         bool  isBig       = false;
         bool  isDiscrete  = false;
+        bool  isVernier   = false;
         int   numPositions = 11;
         bool  centreDetent = false;
 
@@ -38,7 +40,6 @@ namespace bm176
         int   dragStartY     = 0;
 
         float angleFromValue(float v) const;
-        float valueFromAngle(float angle) const;
         float knobRadius() const;
 
         void drawShadow(juce::Graphics& g);

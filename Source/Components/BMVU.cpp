@@ -6,13 +6,11 @@ namespace bm176
 {
     inline constexpr float DEG2RAD = juce::MathConstants<float>::pi / 180.0f;
 
-    BMVU::BMVU()
-    {
-        setRepaintsOnMouseActivity(false);
-    }
+    BMVU::BMVU()  { setRepaintsOnMouseActivity(false); startTimerHz(30); }
+    BMVU::~BMVU() { stopTimer(); }
 
-    void BMVU::setValue(float dB)    { needleDB = juce::jlimit(-20.0f, 3.0f, dB); repaint(); }
-    void BMVU::setMode(bool gr)      { grMode = gr; repaint(); }
+    void BMVU::setTargetDB(float dB) { targetDB = juce::jlimit(-20.0f, 3.0f, dB); }
+    void BMVU::setMode(bool gr)      { grMode = gr; }
 
     float BMVU::pctToAngle(float pct) const
     {
@@ -27,13 +25,21 @@ namespace bm176
         return { cx + radius * std::sin(rad), cy - radius * std::cos(rad) };
     }
 
+    void BMVU::timerCallback()
+    {
+        constexpr float tc = 0.065f;
+        constexpr float dt = 1.0f / 30.0f;
+        constexpr float k = dt / tc;
+        displayDB += k * (targetDB - displayDB);
+        repaint();
+    }
+
     void BMVU::resized() {}
 
     void BMVU::paint(juce::Graphics& g)
     {
         g.fillAll(juce::Colours::transparentBlack);
 
-        const auto b = getLocalBounds().toFloat();
         glassX = VU_GLASS_X - VU_BEZEL_X;
         glassY = VU_GLASS_Y - VU_BEZEL_Y;
         glassW = VU_GLASS_W;
@@ -42,18 +48,19 @@ namespace bm176
         drawBezel(g);
         drawGlassRecess(g);
 
-        juce::Graphics::ScopedSaveState ss(g);
-        g.reduceClipRegion(glassX, glassY, static_cast<int>(glassW), static_cast<int>(glassH));
-        g.addTransform(juce::AffineTransform::translation(glassX, glassY));
+        {
+            juce::Graphics::ScopedSaveState ss(g);
+            g.reduceClipRegion(juce::roundToInt(glassX), juce::roundToInt(glassY),
+                              juce::roundToInt(glassW), juce::roundToInt(glassH));
+            g.addTransform(juce::AffineTransform::translation(glassX, glassY));
 
-        drawFaceBg(g);
-        drawRedArc(g);
-        drawDbScale(g);
-        drawPctScale(g);
-        drawNeedle(g);
-        drawFaceDecor(g);
-
-        g.addTransform(juce::AffineTransform::translation(-glassX, -glassY));
+            drawFaceBg(g);
+            drawRedArc(g);
+            drawDbScale(g);
+            drawPctScale(g);
+            drawFaceDecor(g);
+            drawNeedle(g);
+        }
         drawGlare(g);
     }
 
@@ -95,14 +102,17 @@ namespace bm176
     void BMVU::drawRedArc(juce::Graphics& g)
     {
         constexpr float Rred = 302.0f;
-        const float startAngle = pctToAngle(100.0f);
-        constexpr float endAngle = 33.0f;
-
-        juce::Path arc;
         const float cx = glassW * 0.5f;
         const float cy = 1.7f * glassH;
-        arc.addCentredArc(cx, cy, Rred, Rred, 0.0f,
-            juce::degreesToRadians(startAngle), juce::degreesToRadians(endAngle), true);
+
+        const float startSpecDeg = pctToAngle(100.0f);
+        const float endSpecDeg   = 33.0f;
+
+        const float juceStart = juce::degreesToRadians(90.0f - startSpecDeg);
+        const float juceEnd   = juce::degreesToRadians(90.0f - endSpecDeg);
+
+        juce::Path arc;
+        arc.addCentredArc(cx, cy, Rred, Rred, 0.0f, juceEnd, juceStart, true);
         g.setColour(vuRedArc);
         g.strokePath(arc, juce::PathStrokeType(7.0f, juce::PathStrokeType::curved, juce::PathStrokeType::butt));
     }
@@ -111,31 +121,27 @@ namespace bm176
     {
         constexpr float Rtick   = 268.0f;
         constexpr float RdBnum  = 284.0f;
-        constexpr float pctVals[] = {10.0f, 31.6f, 44.7f, 56.2f, 70.8f, 79.4f, 89.1f,
-                                      100.0f, 112.2f, 125.9f, 141.3f};
+        constexpr float pctVals[]  = {10.0f, 31.6f, 44.7f, 56.2f, 70.8f, 79.4f, 89.1f,
+                                       100.0f, 112.2f, 125.9f, 141.3f};
         constexpr const char* labels[] = {"-20", "-10", "-7", "-5", "-3", "-2", "-1",
                                            "0", "+1", "+2", "+3"};
         constexpr int count = 11;
-        constexpr bool major[] = {true, true, false, true, false, false, false,
-                                   true, false, true, true};
+        constexpr int minorTickLen = 5;
+        constexpr int majorTickLen = 9;
 
         g.setFont(juce::Font(juce::FontOptions().withHeight(15.0f)));
         for (int i = 0; i < count; ++i)
         {
             const float angleDeg = pctToAngle(pctVals[i]);
-            const auto p1 = pointOnArc(Rtick - (major[i] ? 9.0f : 5.0f), angleDeg);
+            const int tickLen = (i == 2 || i == 4 || i == 5 || i == 6 || i == 8) ? minorTickLen : majorTickLen;
+            const auto p1 = pointOnArc(Rtick - tickLen, angleDeg);
             const auto p2 = pointOnArc(Rtick, angleDeg);
-
             g.setColour(vuNumeral);
-            g.drawLine(juce::Line<float>(p1, p2), major[i] ? 1.2f : 0.6f);
-
-            if (major[i])
-            {
-                const auto lpos = pointOnArc(RdBnum, angleDeg);
-                g.drawText(labels[i],
-                    juce::Rectangle<float>(lpos.x - 16.0f, lpos.y - 10.0f, 32.0f, 20.0f),
-                    juce::Justification::centred);
-            }
+            g.drawLine(juce::Line<float>(p1, p2), tickLen == majorTickLen ? 1.2f : 0.6f);
+            const auto lpos = pointOnArc(RdBnum, angleDeg);
+            g.drawText(labels[i],
+                juce::Rectangle<float>(lpos.x - 16.0f, lpos.y - 10.0f, 32.0f, 20.0f),
+                juce::Justification::centred);
         }
 
         for (float p = 10.0f; p <= 100.0f; p += 2.5f)
@@ -169,7 +175,6 @@ namespace bm176
             const auto p2 = pointOnArc(RpctTck, angleDeg);
             g.setColour(vuNumeral);
             g.drawLine(juce::Line<float>(p1, p2), 0.8f);
-
             const auto lpos = pointOnArc(Rpctnum, angleDeg);
             g.drawText(juce::String(p),
                 juce::Rectangle<float>(lpos.x - 14.0f, lpos.y - 9.0f, 28.0f, 18.0f),
@@ -177,10 +182,53 @@ namespace bm176
         }
     }
 
+    void BMVU::drawFaceDecor(juce::Graphics& g)
+    {
+        const float cx = glassW * 0.5f;
+        const float markY = 113.0f;
+        const float capH = 26.0f;
+
+        juce::Font wmFont(juce::FontOptions().withHeight(capH * 0.85f).withStyle("bold"));
+        juce::GlyphArrangement ga;
+        ga.addLineOfText(wmFont, "bma", 0.0f, 0.0f);
+        juce::Rectangle<float> wmBounds = ga.getBoundingBox(0, -1, true);
+        ga.moveRangeOfGlyphs(0, -1, cx - wmBounds.getCentreX(), markY - wmBounds.getCentreY());
+        juce::Path wmPath;
+        ga.createPath(wmPath);
+        g.setColour(vuWordmark.withAlpha(0.85f));
+        g.fillPath(wmPath);
+
+        const float barW = 0.13f * capH;
+        const float barGap = 0.09f * capH;
+        const float barBase = markY + wmBounds.getHeight() * 0.4f;
+        const float barStartX = cx + wmBounds.getWidth() * 0.5f + 6.0f;
+        const float heights[] = {0.45f, 0.62f, 0.78f, 0.92f, 1.00f};
+        for (int i = 0; i < 5; ++i)
+        {
+            const float bh = heights[i] * capH;
+            juce::Path bar;
+            bar.addRoundedRectangle(barStartX + static_cast<float>(i) * (barW + barGap),
+                barBase - bh, barW, bh, barW * 0.5f);
+            g.fillPath(bar);
+        }
+
+        constexpr float lampW = 34.0f;
+        constexpr float lampH = 12.0f;
+        constexpr float lampCy = 181.0f;
+        g.setColour(vuLampBg.withAlpha(0.70f));
+        for (int i = 0; i < 3; ++i)
+        {
+            const float lx = cx + (static_cast<float>(i) - 1.0f) * 41.0f;
+            juce::Path lp;
+            lp.addRoundedRectangle(lx - lampW * 0.5f, lampCy - lampH * 0.5f, lampW, lampH, 3.0f);
+            g.fillPath(lp);
+        }
+    }
+
     void BMVU::drawNeedle(juce::Graphics& g)
     {
         constexpr float Rtick = 268.0f;
-        float pct = 100.0f * std::pow(10.0f, needleDB / 20.0f);
+        float pct = 100.0f * std::pow(10.0f, displayDB / 20.0f);
         if (grMode) pct = 100.0f - pct;
         pct = juce::jlimit(0.0f, 150.0f, pct);
         const float angleDeg = pctToAngle(pct);
@@ -190,60 +238,34 @@ namespace bm176
 
         const float hubR = 0.28f * Rtick;
         const float tipR = 1.03f * Rtick;
-        const float x1 = cx + hubR * std::sin(angleRad);
-        const float y1 = cy - hubR * std::cos(angleRad);
-        const float x2 = cx + tipR * std::sin(angleRad);
-        const float y2 = cy - tipR * std::cos(angleRad);
+        constexpr float hubW = 3.5f;
+        constexpr float tipW = 1.6f;
+
+        const float cosA = std::cos(angleRad);
+        const float sinA = std::sin(angleRad);
+        const float midX = cx + hubR * sinA;
+        const float midY = cy - hubR * cosA;
+        const float tipX = cx + tipR * sinA;
+        const float tipY = cy - tipR * cosA;
+
+        const float perpX = cosA * 0.5f;
+        const float perpY = sinA * 0.5f;
 
         juce::Path needle;
-        needle.addLineSegment(juce::Line<float>(x1, y1, x2, y2), 0.0f);
-        juce::PathStrokeType nStroke(3.5f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
+        needle.startNewSubPath(midX - perpX * hubW, midY - perpY * hubW);
+        needle.lineTo(midX + perpX * hubW, midY + perpY * hubW);
+        needle.lineTo(tipX + perpX * tipW, tipY + perpY * tipW);
+        needle.lineTo(tipX - perpX * tipW, tipY - perpY * tipW);
+        needle.closeSubPath();
 
-        juce::Path shadowP;
-        nStroke.createStrokedPath(shadowP, needle, juce::AffineTransform::translation(2.0f, 3.0f));
+        juce::Path shadowNeedle;
+        needle.applyTransform(juce::AffineTransform::translation(2.0f, 3.0f));
         g.setColour(juce::Colours::black.withAlpha(0.30f));
-        g.fillPath(shadowP);
+        g.fillPath(needle);
 
+        needle.applyTransform(juce::AffineTransform::translation(-2.0f, -3.0f));
         g.setColour(juce::Colour(0xff161616));
-        g.strokePath(needle, nStroke);
-
-        juce::Path thinNeedle;
-        thinNeedle.addLineSegment(juce::Line<float>(x1, y1, x2, y2), 0.0f);
-        juce::PathStrokeType thinS(1.6f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
-        g.setColour(juce::Colour(0xff161616));
-        g.strokePath(thinNeedle, thinS);
-    }
-
-    void BMVU::drawFaceDecor(juce::Graphics& g)
-    {
-        const float cx = glassW * 0.5f;
-        const float markY = 113.0f;
-        const float markH = 26.0f;
-
-        juce::Font wmFont(juce::FontOptions().withHeight(markH * 0.85f).withStyle("bold"));
-        g.setFont(wmFont);
-        g.setColour(vuWordmark.withAlpha(0.85f));
-        g.drawText("bma",
-            juce::Rectangle<float>(cx - 30.0f, markY - markH * 0.5f, 24.0f, markH),
-            juce::Justification::centredLeft);
-
-        g.setColour(vuWordmark.withAlpha(0.7f));
-        juce::Font smallFont(juce::FontOptions().withHeight(markH * 0.42f));
-        g.setFont(smallFont);
-        g.drawText("GR", juce::Rectangle<float>(cx - 14.0f, markY + markH * 0.15f, 28.0f, 14.0f),
-            juce::Justification::centred);
-
-        constexpr float lampW = 34.0f;
-        constexpr float lampH = 12.0f;
-        constexpr float lampY = 181.0f;
-        g.setColour(vuLampBg.withAlpha(0.70f));
-        for (int i = 0; i < 3; ++i)
-        {
-            const float lx = cx + (static_cast<float>(i) - 1.0f) * 41.0f;
-            juce::Path lp;
-            lp.addRoundedRectangle(lx - lampW * 0.5f, lampY, lampW, lampH, 3.0f);
-            g.fillPath(lp);
-        }
+        g.fillPath(needle);
     }
 
     void BMVU::drawGlare(juce::Graphics& g)
