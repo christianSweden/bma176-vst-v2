@@ -24,7 +24,8 @@ namespace bm176
         void drawKnobDots(juce::Graphics& g, float cx, float cy, float R,
                          int count, float minAngle, float maxAngle);
         void drawKnobDotsAt(juce::Graphics& g, float cx, float cy, float R,
-                           const std::vector<float>& angles, float dotSize = -1.0f);
+                           const std::vector<float>& angles, float dotSize = -1.0f,
+                           float ringFactor = 1.26f);
         void drawEndWords(juce::Graphics& g, float cx, float cy, float R,
                          const juce::String& leftWord, const juce::String& rightWord);
         void drawDiscreteLabels(juce::Graphics& g, float cx, float cy, float R,
