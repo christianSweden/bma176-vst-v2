@@ -45,7 +45,9 @@ namespace bm176
         if (!textureBuilt || brushedTexture.getWidth() != getWidth() || brushedTexture.getHeight() != getHeight())
             buildTexture();
 
-        juce::ColourGradient panelGrad(panelBase, 0.0f, 0.0f, panelDeep, 0.0f, h, false);
+        juce::ColourGradient panelGrad(
+            panelBase.brighter(0.10f), 0.0f, 0.0f,
+            panelDeep.brighter(0.05f), w, h, false);
         g.setGradientFill(panelGrad);
         g.fillAll();
 
