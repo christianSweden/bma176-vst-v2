@@ -113,8 +113,8 @@ namespace bm176
         juce::StringArray smallNums{"2", "4", "6", "8"};
         juce::StringArray smallAngles{"-90", "-45", "45", "90"};
         drawKnobScaleNumbers(g, 679.0f, 166.0f, 41.0f, smallNums, smallAngles,
-            juce::StringArray{"0", "1", "-1", "0"},
-            juce::StringArray{"0", "-1", "-1", "0"});
+            juce::StringArray{"0", "2", "-2", "0"},
+            juce::StringArray{"0", "-2", "-2", "0"});
         drawKnobDotsAt(g, 679.0f, 166.0f, 41.0f,
             std::vector<float>{-150.0f, -120.0f, -90.0f, -67.5f, -45.0f, 0.0f, 45.0f, 67.5f, 90.0f, 120.0f, 150.0f},
             3.25f, 1.236f);
