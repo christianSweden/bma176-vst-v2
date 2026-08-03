@@ -101,9 +101,9 @@ namespace bm176
         drawSectionLabel(g, 1364.0f, 207.0f, 16.0f, "VERNIER");
         drawSectionLabel(g, 1555.0f,  44.0f, 18.0f, "OUTPUT");
         drawSectionLabel(g, 1734.0f,  24.0f, 16.0f, "RELEASE");
-        drawSectionLabel(g, 1848.0f,  26.0f, 13.0f, "IN");
+        drawSectionLabel(g, 1848.0f,  61.0f, 13.0f, "IN");
         drawSectionLabel(g, 1848.0f, 134.0f, 13.0f, "BYPASS");
-        drawSectionLabel(g, 1848.0f, 196.0f, 13.0f, "ON");
+        drawSectionLabel(g, 1848.0f, 231.0f, 13.0f, "ON");
 
         juce::StringArray inputLabels, inputAngles;
         for (int v = 40; v >= 0; v -= 4) {
