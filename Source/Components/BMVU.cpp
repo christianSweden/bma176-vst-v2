@@ -185,7 +185,7 @@ namespace bm176
     void BMVU::drawFaceDecor(juce::Graphics& g)
     {
         const float cx = glassW * 0.5f;
-        const float markY = 113.0f;
+        const float markY = glassH - 30.0f;
         const float capH = 26.0f;
 
         juce::Font wmFont(juce::FontOptions().withHeight(capH * 0.85f).withStyle("bold"));
