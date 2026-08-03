@@ -133,7 +133,7 @@ namespace bm176
             juce::StringArray{"10", "0", "-10", "-10", "0", "10"});
         drawDiscreteLabels(g, 567.0f, 98.0f, 41.0f,
             juce::StringArray{"IN", "GR", "OUT"},
-            juce::StringArray{"-45", "0", "45"}, true,
+            juce::StringArray{"-45", "0", "45"}, false,
             juce::StringArray{"-10", "-10", "-10"});
 
         drawWordmark(g, 977.0f, 296.0f, 40.0f);
