@@ -125,13 +125,16 @@ namespace bm176
 
         drawDiscreteLabels(g, 196.0f, 103.0f, 41.0f,
             juce::StringArray{"I.5:I", "2:I", "4:I", "8:I", "I2:I"},
-            juce::StringArray{"-60", "-30", "0", "30", "60"}, false);
+            juce::StringArray{"-60", "-30", "0", "30", "60"}, false,
+            juce::StringArray{"-10", "-10", "-10", "-10", "-10"});
         drawDiscreteLabels(g, 196.0f, 264.0f, 41.0f,
             juce::StringArray{"OFF", "45", "80", "I20", "I50", "200"},
-            juce::StringArray{"-75", "-45", "-15", "15", "45", "75"}, false);
+            juce::StringArray{"-75", "-45", "-15", "15", "45", "75"}, false,
+            juce::StringArray{"10", "-10", "-10", "-10", "-10", "10"});
         drawDiscreteLabels(g, 567.0f, 98.0f, 41.0f,
             juce::StringArray{"IN", "GR", "OUT"},
-            juce::StringArray{"-45", "0", "45"});
+            juce::StringArray{"-45", "0", "45"}, true,
+            juce::StringArray{"-10", "-10", "-10"});
 
         drawWordmark(g, 977.0f, 296.0f, 40.0f);
         drawPanelText(g, 977.0f, 336.0f, 19.0f, "LIMITING  AMPLIFIER   BM 176", 0.22f);
@@ -214,7 +217,8 @@ namespace bm176
     void BMPanel::drawDiscreteLabels(juce::Graphics& g, float cx, float cy, float R,
                                      const juce::StringArray& labels,
                                      const juce::StringArray& angles,
-                                     bool drawDots)
+                                     bool drawDots,
+                                     const juce::StringArray& yOffsets)
     {
         const float rx = 1.55f * R;
         const float ry = 1.05f * R;
@@ -225,7 +229,9 @@ namespace bm176
             const float aDeg = angles[i].getFloatValue();
             const float aRad = juce::degreesToRadians(aDeg);
             const float lx = cx + rx * std::sin(aRad);
-            const float ly = cy - ry * std::cos(aRad);
+            float ly = cy - ry * std::cos(aRad);
+            if (i < yOffsets.size())
+                ly += yOffsets[i].getFloatValue();
             g.drawText(labels[i], juce::Rectangle<float>(lx - 22.0f, ly - 8.0f, 44.0f, 16.0f),
                        juce::Justification::centred);
         }
