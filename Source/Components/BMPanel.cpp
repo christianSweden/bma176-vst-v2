@@ -113,7 +113,8 @@ namespace bm176
         juce::StringArray smallNums{"2", "4", "6", "8"};
         juce::StringArray smallAngles{"-90", "-45", "45", "90"};
         drawKnobScaleNumbers(g, 679.0f, 166.0f, 41.0f, smallNums, smallAngles);
-        drawKnobDots(g, 679.0f, 166.0f, 41.0f, 21, -150.0f, 150.0f);
+        drawKnobDotsAt(g, 679.0f, 166.0f, 41.0f,
+            std::vector<float>{-150.0f, -90.0f, -67.5f, -45.0f, 0.0f, 45.0f, 67.5f, 90.0f, 150.0f});
 
         drawKnobScaleNumbers(g, 1364.0f, 88.0f, 41.0f, smallNums, smallAngles);
         drawKnobDots(g, 1364.0f, 88.0f, 41.0f, 21, -150.0f, 150.0f);
@@ -170,6 +171,21 @@ namespace bm176
             const float ly = cy - ringR * std::cos(aRad);
             g.drawText(labels[i], juce::Rectangle<float>(lx - 16.0f, ly - 10.0f, 32.0f, 20.0f),
                        juce::Justification::centred);
+        }
+    }
+
+    void BMPanel::drawKnobDotsAt(juce::Graphics& g, float cx, float cy, float R,
+                                const std::vector<float>& angles)
+    {
+        const float ringR = 1.26f * R;
+        const float dotSize = (R > 70.0f) ? 3.0f : 2.25f;
+        g.setColour(dotColour.withAlpha(0.85f));
+        for (float aDeg : angles)
+        {
+            const float aRad = juce::degreesToRadians(aDeg);
+            const float dx = cx + ringR * std::sin(aRad);
+            const float dy = cy - ringR * std::cos(aRad);
+            g.fillEllipse(dx - dotSize, dy - dotSize, dotSize * 2.0f, dotSize * 2.0f);
         }
     }
 
