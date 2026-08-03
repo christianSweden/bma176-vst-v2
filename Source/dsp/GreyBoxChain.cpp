@@ -76,7 +76,8 @@ void GreyBoxChain::process(float* buffer, int numSamples, const std::array<float
     float drcParam[7];
     float gainOutParam[1];
 
-    const int clampedIdx = 1;  // force r4
+    const int ratioIdx = static_cast<int>(cond[0] * 3.0f + 0.5f);
+    const int clampedIdx = ratioIdx < 0 ? 0 : (ratioIdx > 3 ? 3 : ratioIdx);
     const float curveCond[3] = { cond[1], cond[2], cond[6] };
     const float ballisticsCond[3] = { cond[0], cond[3], cond[5] };
 
