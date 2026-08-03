@@ -153,6 +153,8 @@ namespace bm176
         apvts.addParameterListener("interstage", this);
         apvts.addParameterListener("compressorOn", this);
         apvts.addParameterListener("meterMode", this);
+        apvts.addParameterListener("inputVernier", this);
+        apvts.addParameterListener("outputVernier", this);
     }
 
     BM176Editor::~BM176Editor()
@@ -162,6 +164,8 @@ namespace bm176
         apvts.removeParameterListener("interstage", this);
         apvts.removeParameterListener("compressorOn", this);
         apvts.removeParameterListener("meterMode", this);
+        apvts.removeParameterListener("inputVernier", this);
+        apvts.removeParameterListener("outputVernier", this);
     }
 
     void BM176Editor::setMeterSources(MeterSource gainReduction,
@@ -200,6 +204,10 @@ namespace bm176
             const int idx = juce::jlimit(0, 2, juce::roundToInt(newValue));
             meterModeIdx = idx;
         }
+        else if (parameterID == "inputVernier")
+            vernierInKnob.setValue(newValue * 2.0f - 1.0f);
+        else if (parameterID == "outputVernier")
+            vernierOutKnob.setValue(newValue * 2.0f - 1.0f);
     }
 
     void BM176Editor::resized()
