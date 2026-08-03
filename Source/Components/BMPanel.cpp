@@ -125,10 +125,10 @@ namespace bm176
 
         drawDiscreteLabels(g, 196.0f, 88.0f, 41.0f,
             juce::StringArray{"I.5:I", "2:I", "4:I", "8:I", "I2:I"},
-            juce::StringArray{"-60", "-30", "0", "30", "60"});
+            juce::StringArray{"-60", "-30", "0", "30", "60"}, false);
         drawDiscreteLabels(g, 196.0f, 249.0f, 41.0f,
             juce::StringArray{"OFF", "45", "80", "I20", "I50", "200"},
-            juce::StringArray{"-75", "-45", "-15", "15", "45", "75"});
+            juce::StringArray{"-75", "-45", "-15", "15", "45", "75"}, false);
         drawDiscreteLabels(g, 567.0f, 83.0f, 41.0f,
             juce::StringArray{"IN", "GR", "OUT"},
             juce::StringArray{"-45", "0", "45"});
@@ -213,7 +213,8 @@ namespace bm176
 
     void BMPanel::drawDiscreteLabels(juce::Graphics& g, float cx, float cy, float R,
                                      const juce::StringArray& labels,
-                                     const juce::StringArray& angles)
+                                     const juce::StringArray& angles,
+                                     bool drawDots)
     {
         const float rx = 1.55f * R;
         const float ry = 1.05f * R;
@@ -228,15 +229,18 @@ namespace bm176
             g.drawText(labels[i], juce::Rectangle<float>(lx - 22.0f, ly - 8.0f, 44.0f, 16.0f),
                        juce::Justification::centred);
         }
-        const float dotR = 1.26f * R;
-        for (int i = 0; i < labels.size() && i < angles.size(); ++i)
+        if (drawDots)
         {
-            const float aDeg = angles[i].getFloatValue();
-            const float aRad = juce::degreesToRadians(aDeg);
-            const float dx = cx + dotR * std::sin(aRad);
-            const float dy = cy - dotR * std::cos(aRad);
-            g.setColour(dotColour.withAlpha(0.85f));
-            g.fillEllipse(dx - 2.5f, dy - 2.5f, 5.0f, 5.0f);
+            const float dotR = 1.26f * R;
+            for (int i = 0; i < labels.size() && i < angles.size(); ++i)
+            {
+                const float aDeg = angles[i].getFloatValue();
+                const float aRad = juce::degreesToRadians(aDeg);
+                const float dx = cx + dotR * std::sin(aRad);
+                const float dy = cy - dotR * std::cos(aRad);
+                g.setColour(dotColour.withAlpha(0.85f));
+                g.fillEllipse(dx - 2.5f, dy - 2.5f, 5.0f, 5.0f);
+            }
         }
     }
 

@@ -26,7 +26,8 @@ namespace bm176
         void drawEndWords(juce::Graphics& g, float cx, float cy, float R,
                          const juce::String& leftWord, const juce::String& rightWord);
         void drawDiscreteLabels(juce::Graphics& g, float cx, float cy, float R,
-                               const juce::StringArray& labels, const juce::StringArray& angles);
+                               const juce::StringArray& labels, const juce::StringArray& angles,
+                               bool drawDots = true);
         void drawScrew(juce::Graphics& g, float cx, float cy, float r, float rotationDeg);
         void drawWordmark(juce::Graphics& g, float cx, float cy, float capHeight);
         void drawPanelText(juce::Graphics& g, float cx, float y, float size,
