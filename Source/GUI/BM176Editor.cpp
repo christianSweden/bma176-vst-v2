@@ -61,14 +61,15 @@ namespace bm176
         addAndMakeVisible(releaseKnob);
 
         bypassSwitch.setLabels("", "IN", "BYPASS");
-        bypassSwitch.setState(true);
+        bypassSwitch.setState(false);
         addAndMakeVisible(bypassSwitch);
 
         onLamp.setState(true);
         addAndMakeVisible(onLamp);
 
-        powerSwitch.setLabels("", "OFF", "ON");
-        powerSwitch.setState(true);
+        powerSwitch.setLabels("", "ON", "OFF");
+        powerSwitch.setState(false);
+        powerSwitch.setCallback([this](bool on) { onLamp.setState(on); });
         addAndMakeVisible(powerSwitch);
 
         addAndMakeVisible(inputJack);
@@ -117,7 +118,7 @@ namespace bm176
         vuMeter.setBounds(juce::roundToInt(VU_BEZEL_X), juce::roundToInt(VU_BEZEL_Y),
                           juce::roundToInt(VU_BEZEL_W), juce::roundToInt(VU_BEZEL_H));
 
-        placeCircle(onLamp,  1792.0f, 269.0f, 30.0f);
+        placeCircle(onLamp,  1807.0f, 284.0f, 30.0f);
         placeCircle(inputJack,  90.0f,  77.0f, 46.0f);
         placeCircle(hiZJack,    90.0f, 171.0f, 46.0f);
         placeCircle(outputJack, 90.0f, 254.0f, 46.0f);

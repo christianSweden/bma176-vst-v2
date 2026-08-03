@@ -19,10 +19,13 @@ namespace bm176
             targetY = state ? slotBottomY() : slotTopY();
             if (!dragging)
                 velocity += state ? 80.0f : -80.0f;
+            if (onChange) onChange(state);
         }
     }
 
     bool BM176HardwareSwitch::getState() const { return state; }
+
+    void BM176HardwareSwitch::setCallback(std::function<void(bool)> cb) { onChange = std::move(cb); }
 
     void BM176HardwareSwitch::setLabels(const juce::String& t,
                                         const juce::String& top,

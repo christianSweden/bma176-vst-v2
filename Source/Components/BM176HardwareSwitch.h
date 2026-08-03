@@ -24,6 +24,8 @@ namespace bm176
                        const juce::String& topLabel,
                        const juce::String& bottomLabel);
 
+        void setCallback(std::function<void(bool)> cb);
+
         void timerCallback() override;
 
     private:
@@ -38,6 +40,7 @@ namespace bm176
         juce::String title;
         juce::String topLabel;
         juce::String bottomLabel;
+        std::function<void(bool)> onChange;
 
         float slotTopY() const;
         float slotBottomY() const;
