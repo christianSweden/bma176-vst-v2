@@ -42,8 +42,8 @@ juce_add_plugin(BM176
     Source/Components/BMContinuousKnob.cpp
     Source/Components/BMToggleSwitch.h
     Source/Components/BMToggleSwitch.cpp
-    Source/Components/BMVerticalSlideSwitch.h
-    Source/Components/BMVerticalSlideSwitch.cpp
+    Source/Components/BM176HardwareSwitch.h
+    Source/Components/BM176HardwareSwitch.cpp
     Source/Components/BMVU.h
     Source/Components/BMVU.cpp
     Source/Components/BMLED.h
@@ -62,7 +62,7 @@ target_sources(BM176 PRIVATE
     Source/Components/BMDiscreteKnob.cpp
     Source/Components/BMContinuousKnob.cpp
     Source/Components/BMToggleSwitch.cpp
-    Source/Components/BMVerticalSlideSwitch.cpp
+    Source/Components/BM176HardwareSwitch.cpp
     Source/Components/BMVU.cpp
     Source/Components/BMLED.cpp
     Source/Components/BMJackSocket.cpp

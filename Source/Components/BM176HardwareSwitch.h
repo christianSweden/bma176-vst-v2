@@ -4,11 +4,11 @@
 
 namespace bm176
 {
-    class BMVerticalSlideSwitch : public juce::Component, private juce::Timer
+    class BM176HardwareSwitch : public juce::Component, private juce::Timer
     {
     public:
-        BMVerticalSlideSwitch();
-        ~BMVerticalSlideSwitch() override;
+        BM176HardwareSwitch();
+        ~BM176HardwareSwitch() override;
 
         void paint(juce::Graphics& g) override;
         void resized() override;
@@ -44,6 +44,6 @@ namespace bm176
         float slotTravel() const;
         float clampSlot(float y) const;
 
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BMVerticalSlideSwitch)
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BM176HardwareSwitch)
     };
 }
