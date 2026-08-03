@@ -89,14 +89,14 @@ namespace bm176
             c.setBounds(juce::roundToInt(cx - 30.0f), juce::roundToInt(cy - 12.0f - 48.0f), 60, 96);
         };
 
-        placeCircle(ratioKnob,      196.0f,  88.0f, 82.0f);
-        placeCircle(sidechainKnob,  196.0f, 249.0f, 82.0f);
+        placeCircle(ratioKnob,      196.0f, 103.0f, 82.0f);
+        placeCircle(sidechainKnob,  196.0f, 264.0f, 82.0f);
         placeCircle(inputKnob,      376.0f, 171.0f, 158.0f);
-        placeCircle(meterKnob,      567.0f,  83.0f, 82.0f);
-        placeCircle(vernierInKnob,  567.0f, 238.0f, 82.0f);
+        placeCircle(meterKnob,      567.0f,  98.0f, 82.0f);
+        placeCircle(vernierInKnob,  567.0f, 253.0f, 82.0f);
         placeCircle(thresholdKnob,  679.0f, 166.0f, 82.0f);
         placeCircle(attackKnob,    1364.0f,  88.0f, 82.0f);
-        placeCircle(vernierOutKnob,1364.0f, 249.0f, 82.0f);
+        placeCircle(vernierOutKnob,1364.0f, 264.0f, 82.0f);
         placeCircle(outputKnob,    1555.0f, 171.0f, 158.0f);
         placeCircle(releaseKnob,   1734.0f,  88.0f, 82.0f);
 

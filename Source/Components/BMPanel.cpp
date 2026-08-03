@@ -123,13 +123,13 @@ namespace bm176
         drawKnobDots(g, 1734.0f, 88.0f, 41.0f, 21, -150.0f, 150.0f);
         drawEndWords(g, 1734.0f, 88.0f, 41.0f, "SLOW", "FAST");
 
-        drawDiscreteLabels(g, 196.0f, 88.0f, 41.0f,
+        drawDiscreteLabels(g, 196.0f, 103.0f, 41.0f,
             juce::StringArray{"I.5:I", "2:I", "4:I", "8:I", "I2:I"},
             juce::StringArray{"-60", "-30", "0", "30", "60"}, false);
-        drawDiscreteLabels(g, 196.0f, 249.0f, 41.0f,
+        drawDiscreteLabels(g, 196.0f, 264.0f, 41.0f,
             juce::StringArray{"OFF", "45", "80", "I20", "I50", "200"},
             juce::StringArray{"-75", "-45", "-15", "15", "45", "75"}, false);
-        drawDiscreteLabels(g, 567.0f, 83.0f, 41.0f,
+        drawDiscreteLabels(g, 567.0f, 98.0f, 41.0f,
             juce::StringArray{"IN", "GR", "OUT"},
             juce::StringArray{"-45", "0", "45"});
 
