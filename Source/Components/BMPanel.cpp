@@ -95,7 +95,8 @@ namespace bm176
         drawSectionLabel(g, 679.0f, 100.0f, 16.0f, "THRESHOLD");
         drawSectionLabel(g, 1243.0f, 118.0f, 13.0f, "INTERSTAGE");
         drawSectionLabel(g, 1243.0f, 140.0f, 12.0f, "IN");
-        drawSectionLabel(g, 1243.0f, 248.0f, 12.0f, "OUT");
+        drawSectionLabel(g, 1243.0f, 262.0f, 12.0f, "ATTACK");
+        drawSectionLabel(g, 1243.0f, 276.0f, 12.0f, "OFF");
         drawSectionLabel(g, 1364.0f,  24.0f, 16.0f, "ATTACK");
         drawSectionLabel(g, 1364.0f, 207.0f, 16.0f, "VERNIER");
         drawSectionLabel(g, 1555.0f,  44.0f, 18.0f, "OUTPUT");
@@ -103,7 +104,6 @@ namespace bm176
         drawSectionLabel(g, 1848.0f,  26.0f, 13.0f, "IN");
         drawSectionLabel(g, 1848.0f, 134.0f, 13.0f, "BYPASS");
         drawSectionLabel(g, 1848.0f, 196.0f, 13.0f, "ON");
-        drawSectionLabel(g, 1243.0f, 267.0f, 12.0f, "ATTACK OFF");
 
         juce::StringArray inputLabels, inputAngles;
         for (int v = 40; v >= 0; v -= 4) {
