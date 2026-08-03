@@ -114,7 +114,7 @@ namespace bm176
         juce::StringArray smallAngles{"-90", "-45", "45", "90"};
         drawKnobScaleNumbers(g, 679.0f, 166.0f, 41.0f, smallNums, smallAngles,
             juce::StringArray{"0", "3", "-3", "0"},
-            juce::StringArray{"0", "-3", "-3", "0"});
+            juce::StringArray{"0", "-3", "-3", "0"}, 14.0f);
         drawKnobDotsAt(g, 679.0f, 166.0f, 41.0f,
             std::vector<float>{-150.0f, -120.0f, -90.0f, -67.5f, -45.0f, 0.0f, 45.0f, 67.5f, 90.0f, 120.0f, 150.0f},
             3.25f, 1.236f);
@@ -163,10 +163,11 @@ namespace bm176
                                        const juce::StringArray& labels,
                                        const juce::StringArray& angles,
                                        const juce::StringArray& xo,
-                                       const juce::StringArray& yo)
+                                       const juce::StringArray& yo,
+                                       float fontSize)
     {
         const float ringR = 1.45f * R;
-        g.setFont(juce::Font(juce::FontOptions().withHeight(15.0f)));
+        g.setFont(juce::Font(juce::FontOptions().withHeight(fontSize)));
         g.setColour(dotColour.withAlpha(0.85f));
         for (int i = 0; i < labels.size() && i < angles.size(); ++i)
         {

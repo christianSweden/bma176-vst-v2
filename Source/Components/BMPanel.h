@@ -21,7 +21,8 @@ namespace bm176
                              const juce::String& text);
         void drawKnobScaleNumbers(juce::Graphics& g, float cx, float cy, float R,
                                   const juce::StringArray& labels, const juce::StringArray& angles,
-                                  const juce::StringArray& xo = {}, const juce::StringArray& yo = {});
+                                  const juce::StringArray& xo = {}, const juce::StringArray& yo = {},
+                                  float fontSize = 15.0f);
         void drawKnobDots(juce::Graphics& g, float cx, float cy, float R,
                          int count, float minAngle, float maxAngle);
         void drawKnobDotsAt(juce::Graphics& g, float cx, float cy, float R,
