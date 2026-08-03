@@ -182,7 +182,9 @@ void BM176AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
     // Vernier trim — delta from training references.
     // Training data: vernier_in=10 (5 o'clock, max), vernier_out=0 (7 o'clock, min).
     // BM176 verniers are -1 to 1; map to 0-10 dial space.
-    // M5 calibration (2026-08-02): in={0:-2.39, 5:-1.34, 10:0.0}, out={0:0.0, 5:2.10, 10:3.80}
+    // Calibration 2026-08-03 (single -20dBFS tone, in=5, out=5, comp OFF):
+    //   vernier_in:  {0:-2.39, 5:-1.34, 10:0.00}
+    //   vernier_out: {0:0.00,  5:2.00,  10:4.40}
     const float viDial = (inputVernierVal + 1.0f) * 5.0f;
     const float voDial = (outputVernierVal + 1.0f) * 5.0f;
     auto vernierGain = [](float dial, float d0, float d5, float d10) -> float {
@@ -191,8 +193,8 @@ void BM176AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
     };
     const float viDb = vernierGain(viDial, -2.39f, -1.34f, 0.0f)
                        - vernierGain(10.0f,  -2.39f, -1.34f, 0.0f);
-    const float voDb = vernierGain(voDial, 0.0f,   2.10f, 3.80f)
-                       - vernierGain(0.0f,   0.0f,  2.10f, 3.80f);
+    const float voDb = vernierGain(voDial, 0.0f,   2.00f, 4.40f)
+                       - vernierGain(0.0f,   0.0f,  2.00f, 4.40f);
     const float vernierDb = viDb + voDb;
     if (std::abs(vernierDb) > 0.001f)
     {
