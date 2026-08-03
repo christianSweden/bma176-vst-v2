@@ -114,7 +114,8 @@ namespace bm176
         juce::StringArray smallAngles{"-90", "-45", "45", "90"};
         drawKnobScaleNumbers(g, 679.0f, 166.0f, 41.0f, smallNums, smallAngles);
         drawKnobDotsAt(g, 679.0f, 166.0f, 41.0f,
-            std::vector<float>{-150.0f, -120.0f, -90.0f, -67.5f, -45.0f, 0.0f, 45.0f, 67.5f, 90.0f, 120.0f, 150.0f});
+            std::vector<float>{-150.0f, -120.0f, -90.0f, -67.5f, -45.0f, 0.0f, 45.0f, 67.5f, 90.0f, 120.0f, 150.0f},
+            3.25f);
 
         drawKnobScaleNumbers(g, 1364.0f, 88.0f, 41.0f, smallNums, smallAngles);
         drawKnobDots(g, 1364.0f, 88.0f, 41.0f, 21, -150.0f, 150.0f);
@@ -175,10 +176,11 @@ namespace bm176
     }
 
     void BMPanel::drawKnobDotsAt(juce::Graphics& g, float cx, float cy, float R,
-                                const std::vector<float>& angles)
+                                const std::vector<float>& angles, float dotSize)
     {
         const float ringR = 1.26f * R;
-        const float dotSize = (R > 70.0f) ? 3.0f : 2.25f;
+        if (dotSize < 0.0f)
+            dotSize = (R > 70.0f) ? 3.0f : 2.25f;
         g.setColour(dotColour.withAlpha(0.85f));
         for (float aDeg : angles)
         {
