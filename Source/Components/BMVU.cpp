@@ -217,23 +217,29 @@ namespace bm176
     void BMVU::drawFaceDecor(juce::Graphics& g)
     {
         const float cx = glassW * 0.5f;
-        const float markY = glassH * 0.5f;
+        const float markY = glassH - 30.0f;
         const float capH = 26.0f;
 
         juce::Font wmFont(juce::FontOptions().withHeight(capH * 0.85f).withStyle("bold"));
         juce::GlyphArrangement ga;
         ga.addLineOfText(wmFont, "bma", 0.0f, 0.0f);
         juce::Rectangle<float> wmBounds = ga.getBoundingBox(0, -1, true);
-        ga.moveRangeOfGlyphs(0, -1, cx - wmBounds.getCentreX(), markY - wmBounds.getCentreY());
+
+        const float barW = 0.13f * capH;
+        const float barGap = 0.09f * capH;
+        const float barStartOffset = 6.0f;
+        const float totalBarW = 5.0f * barW + 4.0f * barGap;
+        const float unitWidth = wmBounds.getWidth() + barStartOffset + totalBarW;
+        const float unitLeft = cx - unitWidth * 0.5f;
+        const float barBase = markY + wmBounds.getHeight() * 0.4f;
+
+        ga.moveRangeOfGlyphs(0, -1, unitLeft - wmBounds.getX(), markY - wmBounds.getCentreY());
         juce::Path wmPath;
         ga.createPath(wmPath);
         g.setColour(vuWordmark.withAlpha(0.75f));
         g.fillPath(wmPath);
 
-        const float barW = 0.13f * capH;
-        const float barGap = 0.09f * capH;
-        const float barBase = markY + wmBounds.getHeight() * 0.4f;
-        const float barStartX = cx + wmBounds.getWidth() * 0.5f + 6.0f;
+        const float barStartX = unitLeft + wmBounds.getWidth() + barStartOffset;
         const float heights[] = {0.45f, 0.62f, 0.78f, 0.92f, 1.00f};
         for (int i = 0; i < 5; ++i)
         {
