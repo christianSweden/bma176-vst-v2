@@ -55,6 +55,12 @@ void GreyBoxChain::prepare(double sampleRate) noexcept
 {
     sampleRate_ = sampleRate;
     drc_.prepare(sampleRate);
+
+    // V4 post-filter: output transformer LF rolloff, first-order HP at 110 Hz, Q=0.7071
+    // Fitted from v4_postfilter_A ESS sweep at in=10, ist=1, -18 dBFS (2026-08-03).
+    // RMSE 0.73 dB in 30-500 Hz band. Mid-band (200Hz-15kHz) is flat. 
+    postFilter_.computeCoeffs(BiquadType::HighPass, 0.0f, 110.0f, 0.7071f, sampleRate);
+
     reset();
 }
 
@@ -62,6 +68,7 @@ void GreyBoxChain::reset() noexcept
 {
     eq_.reset();
     drc_.reset();
+    postFilter_.reset();
 }
 
 void GreyBoxChain::setBypassed(bool bypassed) noexcept
@@ -102,6 +109,7 @@ void GreyBoxChain::process(float* buffer, int numSamples, const std::array<float
     drc_.process(buffer, numSamples);
     gainOut_.process(buffer, numSamples);
     outputColor_.process(buffer, numSamples);
+    postFilter_.process(buffer, numSamples);
 
 #ifndef PARITY_HARNESS
     static int debugCounter = 0;

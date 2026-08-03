@@ -43,6 +43,7 @@ private:
     VariMuDrcProcessor drc_;
     GainProcessor gainOut_;
     RationalNonlinearity outputColor_;
+    Biquad postFilter_;  // V4: output transformer LF rolloff (HP 110 Hz)
 
     MlpController gainInCtrl_;
     MlpController eqCtrl_;
