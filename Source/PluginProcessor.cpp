@@ -164,14 +164,13 @@ void BM176AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
     // Run the neural model chain
     chain.process(channelData, numSamples, cond);
 
-    // Gain anchor — the gain_in/gain_out controllers were trained with Rational NL
-    // blocks that had +3.09 dB static gain each (a1=1.597). After NL normalization
-    // (2026-08-03: numerator divided by a1 → unity small-signal gain), the controllers
-    // predict 4.56 dB too little gain. Compensate so the total chain at training
-    // reference (vi=10,vo=0,compOFF) matches hardware at -19.6 dBFS / +0.4 dB.
-    // TODO: retrain gain controllers with normalized NL to remove this anchor.
+    // Gain anchor — corrects the model chain output to match hardware throughput.
+    // Measured 2026-08-03: chain_out = -26.56 dBFS RMS (-23.55 dB peak) at training ref
+    // (in=5,out=5,vi=10,vo=0,compOFF). Hardware at same settings: -19.6 dBFS peak.
+    // Anchor = -19.6 - (-23.55) = +3.95 dB.
+    // TODO: retrain controllers with normalized NL, then remove this anchor.
     {
-        constexpr float kGainAnchorDb = 4.56f;
+        constexpr float kGainAnchorDb = 3.95f;
         const float anchorLin = std::pow(10.0f, kGainAnchorDb / 20.0f);
         juce::FloatVectorOperations::multiply(channelData, anchorLin, numSamples);
     }

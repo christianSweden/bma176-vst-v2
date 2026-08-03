@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/christian/PluginDev/BM176/build_linux/cmake_install.cmake",
+		"/home/christian/PluginDev/BM176/build_linux/JUCE/cmake_install.cmake",
+		"/home/christian/PluginDev/BM176/build_linux/JUCE/modules/cmake_install.cmake",
+		"/home/christian/PluginDev/BM176/build_linux/JUCE/extras/Build/cmake_install.cmake",
+		"/home/christian/PluginDev/BM176/build_linux/JUCE/extras/Build/juceaide/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

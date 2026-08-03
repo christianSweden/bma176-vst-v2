@@ -1,0 +1,3 @@
+/home/christian/PluginDev/BM176/build_linux/vst3_helpers/BM176/CMakeFiles/vst3_helper.dir
+/home/christian/PluginDev/BM176/build_linux/vst3_helpers/BM176/CMakeFiles/edit_cache.dir
+/home/christian/PluginDev/BM176/build_linux/vst3_helpers/BM176/CMakeFiles/rebuild_cache.dir
