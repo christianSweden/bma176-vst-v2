@@ -101,7 +101,7 @@ namespace bm176
         placeCircle(vernierInKnob,  567.0f, 253.0f, 82.0f);
         placeCircle(thresholdKnob,  679.0f, 166.0f, 82.0f);
         placeCircle(attackKnob,    1364.0f,  88.0f, 82.0f);
-        placeCircle(vernierOutKnob,1364.0f, 264.0f, 82.0f);
+        placeCircle(vernierOutKnob,1364.0f, 253.0f, 82.0f);
         placeCircle(outputKnob,    1555.0f, 171.0f, 158.0f);
         placeCircle(releaseKnob,   1734.0f,  88.0f, 82.0f);
 
