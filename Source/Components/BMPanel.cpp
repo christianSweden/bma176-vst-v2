@@ -93,7 +93,7 @@ namespace bm176
         drawSectionLabel(g, 567.0f,  25.0f, 16.0f, "METER");
         drawSectionLabel(g, 567.0f, 196.0f, 16.0f, "VERNIER");
         drawSectionLabel(g, 679.0f, 100.0f, 16.0f, "THRESHOLD");
-        drawSectionLabel(g, 1243.0f, 118.0f, 16.0f, "INTERSTAGE");
+        drawSectionLabel(g, 1243.0f, 118.0f, 14.0f, "INTERSTAGE");
         drawSectionLabel(g, 1243.0f, 140.0f, 12.0f, "IN");
         drawSectionLabel(g, 1243.0f, 248.0f, 12.0f, "OUT");
         drawSectionLabel(g, 1364.0f,  24.0f, 16.0f, "ATTACK");

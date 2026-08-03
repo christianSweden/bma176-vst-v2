@@ -109,8 +109,8 @@ namespace bm176
             c.setBounds(juce::roundToInt(cx - 18.0f), juce::roundToInt(cy - 50.0f), 36, 100);
         };
 
-        placeSwitch(interstageSwitch, 1243.0f, 196.0f);
-        placeSwitch(attackOffSwitch,  1243.0f, 268.0f);
+        placeSwitch(interstageSwitch, 1243.0f, 176.0f);
+        placeSwitch(attackOffSwitch,  1243.0f, 303.0f);
         bypassSwitch.setBounds(juce::roundToInt(1848.0f - 18.0f), juce::roundToInt(88.0f - 50.0f), 36, 100);
         placeSwitch(powerSwitch,      1848.0f, 254.0f);
 
