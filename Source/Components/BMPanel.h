@@ -22,9 +22,9 @@ namespace bm176
         void drawKnobScaleNumbers(juce::Graphics& g, float cx, float cy, float R,
                                   const juce::StringArray& labels, const juce::StringArray& angles,
                                   const juce::StringArray& xo = {}, const juce::StringArray& yo = {},
-                                  float fontSize = 15.0f);
+                                  float fontSize = 15.0f, float ringFactor = 1.45f);
         void drawKnobDots(juce::Graphics& g, float cx, float cy, float R,
-                         int count, float minAngle, float maxAngle);
+                         int count, float minAngle, float maxAngle, float ringFactor = 1.26f);
         void drawKnobDotsAt(juce::Graphics& g, float cx, float cy, float R,
                            const std::vector<float>& angles, float dotSize = -1.0f,
                            float ringFactor = 1.26f);

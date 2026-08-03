@@ -98,8 +98,9 @@ namespace bm176
             inputLabels.add(hwString(v));
             inputAngles.add(juce::String((static_cast<float>(v) - 20.0f) * 7.5f));
         }
-        drawKnobScaleNumbers(g, 376.0f, 171.0f, 79.0f, inputLabels, inputAngles);
-        drawKnobDots(g, 376.0f, 171.0f, 79.0f, 21, -150.0f, 150.0f);
+        drawKnobScaleNumbers(g, 376.0f, 171.0f, 79.0f, inputLabels, inputAngles,
+            {}, {}, 15.0f, 1.387f);
+        drawKnobDots(g, 376.0f, 171.0f, 79.0f, 21, -150.0f, 150.0f, 1.197f);
 
         juce::StringArray outputLabels;
         juce::StringArray outputAngles;
@@ -107,8 +108,9 @@ namespace bm176
             outputLabels.add(hwString(v));
             outputAngles.add(juce::String((static_cast<float>(v) - 20.0f) * 7.5f));
         }
-        drawKnobScaleNumbers(g, 1555.0f, 171.0f, 79.0f, outputLabels, outputAngles);
-        drawKnobDots(g, 1555.0f, 171.0f, 79.0f, 21, -150.0f, 150.0f);
+        drawKnobScaleNumbers(g, 1555.0f, 171.0f, 79.0f, outputLabels, outputAngles,
+            {}, {}, 15.0f, 1.387f);
+        drawKnobDots(g, 1555.0f, 171.0f, 79.0f, 21, -150.0f, 150.0f, 1.197f);
 
         juce::StringArray smallNums{"2", "4", "6", "8"};
         juce::StringArray smallAngles{"-90", "-45", "45", "90"};
@@ -172,9 +174,10 @@ namespace bm176
                                        const juce::StringArray& angles,
                                        const juce::StringArray& xo,
                                        const juce::StringArray& yo,
-                                       float fontSize)
+                                       float fontSize,
+                                       float ringFactor)
     {
-        const float ringR = 1.45f * R;
+        const float ringR = ringFactor * R;
         g.setFont(juce::Font(juce::FontOptions().withHeight(fontSize)));
         g.setColour(dotColour.withAlpha(0.85f));
         for (int i = 0; i < labels.size() && i < angles.size(); ++i)
@@ -208,9 +211,9 @@ namespace bm176
     }
 
     void BMPanel::drawKnobDots(juce::Graphics& g, float cx, float cy, float R,
-                               int count, float minAngle, float maxAngle)
+                               int count, float minAngle, float maxAngle, float ringFactor)
     {
-        const float ringR = 1.26f * R;
+        const float ringR = ringFactor * R;
         const float dotSize = (R > 70.0f) ? 3.0f : 2.25f;
         const int n = count;
         const float range = maxAngle - minAngle;
