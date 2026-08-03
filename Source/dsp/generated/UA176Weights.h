@@ -130,15 +130,17 @@ constexpr float gain_out_param_lo[1] = { -35.0f };
 constexpr float gain_out_param_hi[1] = { 35.0f };
 
 // -- nl (rational): tube_color P2/Q1 (version A, per-term abs) --
+// Normalized 2026-08-03: numerator divided by a1 (1.59681129) so small-signal gain = 1.0.
+// Original coefficients had a1=1.597, causing +3.09 dB static gain at -20 dBFS per block.
 constexpr int tube_color_num_degree = 2;
 constexpr int tube_color_den_degree = 1;
-constexpr float tube_color_num[3] = { -1.29899138e-06f, 1.59681129f, 1.38330711e-06f };
+constexpr float tube_color_num[3] = { -8.134e-07f, 1.0f, 8.663e-07f };
 constexpr float tube_color_den[1] = { 1.18300414f };
 
 // -- nl (rational): output_color P2/Q1 (version A, per-term abs) --
 constexpr int output_color_num_degree = 2;
 constexpr int output_color_den_degree = 1;
-constexpr float output_color_num[3] = { -1.29899138e-06f, 1.59681129f, 1.38330711e-06f };
+constexpr float output_color_num[3] = { -8.134e-07f, 1.0f, 8.663e-07f };
 constexpr float output_color_den[1] = { 1.18300414f };
 
 }  // namespace ua176::weights

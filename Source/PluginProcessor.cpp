@@ -164,6 +164,18 @@ void BM176AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
     // Run the neural model chain
     chain.process(channelData, numSamples, cond);
 
+    // Gain anchor — the gain_in/gain_out controllers were trained with Rational NL
+    // blocks that had +3.09 dB static gain each (a1=1.597). After NL normalization
+    // (2026-08-03: numerator divided by a1 → unity small-signal gain), the controllers
+    // predict 4.56 dB too little gain. Compensate so the total chain at training
+    // reference (vi=10,vo=0,compOFF) matches hardware at -19.6 dBFS / +0.4 dB.
+    // TODO: retrain gain controllers with normalized NL to remove this anchor.
+    {
+        constexpr float kGainAnchorDb = 4.56f;
+        const float anchorLin = std::pow(10.0f, kGainAnchorDb / 20.0f);
+        juce::FloatVectorOperations::multiply(channelData, anchorLin, numSamples);
+    }
+
     // Vernier trim — delta from training references.
     // Training data: vernier_in=10 (5 o'clock, max), vernier_out=0 (7 o'clock, min).
     // BM176 verniers are -1 to 1; map to 0-10 dial space.
