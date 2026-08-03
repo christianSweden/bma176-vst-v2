@@ -76,7 +76,7 @@ namespace bm176
 
         drawSectionLabel(g, 196.0f,  22.0f, 16.0f, "COMP. RATIO");
         drawSectionLabel(g, 196.0f, 194.0f, 16.0f, "SIDECHAIN");
-        drawSectionLabel(g, 376.0f,  34.0f, 18.0f, "INPUT");
+        drawSectionLabel(g, 376.0f,  44.0f, 18.0f, "INPUT");
         drawSectionLabel(g, 567.0f,  25.0f, 16.0f, "METER");
         drawSectionLabel(g, 567.0f, 196.0f, 16.0f, "VERNIER");
         drawSectionLabel(g, 679.0f, 100.0f, 16.0f, "THRESHOLD");
@@ -86,7 +86,7 @@ namespace bm176
         drawSectionLabel(g, 1243.0f, 256.0f, 13.0f, "COMP");
         drawSectionLabel(g, 1364.0f,  24.0f, 16.0f, "ATTACK");
         drawSectionLabel(g, 1364.0f, 207.0f, 16.0f, "VERNIER");
-        drawSectionLabel(g, 1555.0f,  34.0f, 18.0f, "OUTPUT");
+        drawSectionLabel(g, 1555.0f,  44.0f, 18.0f, "OUTPUT");
         drawSectionLabel(g, 1734.0f,  24.0f, 16.0f, "RELEASE");
         drawSectionLabel(g, 1848.0f,  26.0f, 13.0f, "IN");
         drawSectionLabel(g, 1848.0f, 134.0f, 13.0f, "BYPASS");
@@ -99,8 +99,8 @@ namespace bm176
             inputAngles.add(juce::String((static_cast<float>(v) - 20.0f) * 7.5f));
         }
         drawKnobScaleNumbers(g, 376.0f, 171.0f, 79.0f, inputLabels, inputAngles,
-            {}, {}, 15.0f, 1.387f);
-        drawKnobDots(g, 376.0f, 171.0f, 79.0f, 21, -150.0f, 150.0f, 1.197f);
+            {}, {}, 15.0f, 1.324f);
+        drawKnobDots(g, 376.0f, 171.0f, 79.0f, 21, -150.0f, 150.0f, 1.134f);
 
         juce::StringArray outputLabels;
         juce::StringArray outputAngles;
@@ -109,8 +109,8 @@ namespace bm176
             outputAngles.add(juce::String((static_cast<float>(v) - 20.0f) * 7.5f));
         }
         drawKnobScaleNumbers(g, 1555.0f, 171.0f, 79.0f, outputLabels, outputAngles,
-            {}, {}, 15.0f, 1.387f);
-        drawKnobDots(g, 1555.0f, 171.0f, 79.0f, 21, -150.0f, 150.0f, 1.197f);
+            {}, {}, 15.0f, 1.324f);
+        drawKnobDots(g, 1555.0f, 171.0f, 79.0f, 21, -150.0f, 150.0f, 1.134f);
 
         juce::StringArray smallNums{"2", "4", "6", "8"};
         juce::StringArray smallAngles{"-90", "-45", "45", "90"};
