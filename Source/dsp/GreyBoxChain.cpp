@@ -102,26 +102,68 @@ void GreyBoxChain::process(float* buffer, int numSamples, const std::array<float
     gainOut_.process(buffer, numSamples);
     outputColor_.process(buffer, numSamples);
 
-    // Per-stage RMS gauge — prints every ~2s.
-    // Remove after gain anchor / controller diagnosis is complete.
 #ifndef PARITY_HARNESS
     static int debugCounter = 0;
     if (++debugCounter % (48000 * 2 / numSamples) == 0)
     {
-        double sumSq = 0.0;
-        for (int i = 0; i < numSamples; ++i)
-            sumSq += (double)buffer[i] * buffer[i];
-        const float outRms = 20.0f * std::log10(std::sqrt(sumSq / numSamples) + 1e-12f);
+        auto rmsDb = [&](const float* buf, int n) -> float {
+            double sum = 0.0;
+            for (int i = 0; i < n; ++i) sum += (double)buf[i] * buf[i];
+            return 20.0f * std::log10(std::sqrt(sum / n) + 1e-12f);
+        };
+        const float outRms = rmsDb(buffer, numSamples);
+
+        // Denormalize dial values for human-readable output
+        const float dialIn    = cond[1] * 10.0f;
+        const float dialThr   = cond[2] * 10.0f;
+        const float dialAtk   = cond[3] * 10.0f;
+        const float dialOut   = cond[4] * 10.0f;
+        const float dialRel   = cond[5] * 10.0f;
+        const float dialInt   = cond[6];
+        const char* ratioName = (cond[0] <= 0.15f) ? "r2" : (cond[0] <= 0.45f) ? "r4" :
+                                (cond[0] <= 0.75f) ? "r8" : "r12";
+
+        // EQ band gains (every 3rd value starting at 0: 0,3,6,9,12)
+        const float eqGain[5] = { eqParam[0], eqParam[3], eqParam[6], eqParam[9], eqParam[12] };
+
+        // DRC: curve (T,R,W) + ballistics (tau_a, tau_r, s_a, s_r)
+        const float T     = drcParam[0];
+        const float R     = drcParam[1];
+        const float W     = drcParam[2];
+        const float tau_a = drcParam[3];
+        const float tau_r = drcParam[4];
+        const float s_a   = drcParam[5];
+        const float s_r   = drcParam[6];
+        const float grDb  = drc_.getGainReductionDb();
 
 #ifdef _WIN32
         char buf[256];
         snprintf(buf, sizeof(buf),
-                 "BM176 | g_in=%.2f g_out=%.2f T=%.2f R=%.2f W=%.2f | chain_out=%.2f dBFS",
-                 gainInParam[0], gainOutParam[0], drcParam[0], drcParam[1], drcParam[2], outRms);
+                 "CHAIN | %s in=%.1f thr=%.1f atk=%.1f out=%.1f rel=%.1f int=%.0f | cmp=%s",
+                 ratioName, dialIn, dialThr, dialAtk, dialOut, dialRel, dialInt,
+                 drc_.isBypassed() ? "OFF" : "ON");
+        OutputDebugStringA(buf);
+        snprintf(buf, sizeof(buf),
+                 "CHAIN | g_in=%.2f g_out=%.2f | EQ: %.2f %.2f %.2f %.2f %.2f",
+                 gainInParam[0], gainOutParam[0], eqGain[0], eqGain[1], eqGain[2], eqGain[3], eqGain[4]);
+        OutputDebugStringA(buf);
+        snprintf(buf, sizeof(buf),
+                 "CHAIN | DRC: T=%.2f R=%.2f W=%.2f | bal: ta=%.4f tr=%.4f sa=%.2f sr=%.4f",
+                 T, R, W, tau_a, tau_r, s_a, s_r);
+        OutputDebugStringA(buf);
+        snprintf(buf, sizeof(buf),
+                 "CHAIN | chain_out=%.2f dBFS | GR=%.2f dB",
+                 outRms, grDb);
         OutputDebugStringA(buf);
 #else
-        std::printf("BM176 | g_in=%.2f g_out=%.2f T=%.2f R=%.2f W=%.2f | chain_out=%.2f dBFS\n",
-                    gainInParam[0], gainOutParam[0], drcParam[0], drcParam[1], drcParam[2], outRms);
+        std::printf("CHAIN | %s in=%.1f thr=%.1f atk=%.1f out=%.1f rel=%.1f int=%.0f | cmp=%s\n",
+                    ratioName, dialIn, dialThr, dialAtk, dialOut, dialRel, dialInt,
+                    drc_.isBypassed() ? "OFF" : "ON");
+        std::printf("CHAIN | g_in=%.2f g_out=%.2f | EQ: %.2f %.2f %.2f %.2f %.2f\n",
+                    gainInParam[0], gainOutParam[0], eqGain[0], eqGain[1], eqGain[2], eqGain[3], eqGain[4]);
+        std::printf("CHAIN | DRC: T=%.2f R=%.2f W=%.2f | bal: ta=%.4f tr=%.4f sa=%.2f sr=%.4f\n",
+                    T, R, W, tau_a, tau_r, s_a, s_r);
+        std::printf("CHAIN | chain_out=%.2f dBFS | GR=%.2f dB\n", outRms, grDb);
 #endif
     }
 #endif

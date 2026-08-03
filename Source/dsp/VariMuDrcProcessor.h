@@ -31,6 +31,7 @@ public:
     void prepare(double sampleRate) noexcept;
     void setParams(float T, float R, float W, float tauA, float tauR, float cA, float sR) noexcept;
     void setBypassed(bool bypassed) noexcept;
+    bool isBypassed() const noexcept { return bypassed_; }
     void process(float* buffer, int numSamples) noexcept;
     void reset() noexcept;
 

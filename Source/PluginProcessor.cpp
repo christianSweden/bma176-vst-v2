@@ -200,15 +200,42 @@ void BM176AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
     for (int ch = 1; ch < buffer.getNumChannels(); ++ch)
         buffer.copyFrom(ch, 0, buffer, 0, 0, numSamples);
 
-    // Meter levels (RMS, ~1% of captured range above noise floor)
+    // Meter levels (RMS)
+    float sumSq = 0.0f;
+    for (int i = 0; i < numSamples; ++i)
+        sumSq += channelData[i] * channelData[i];
+    const float rms = std::sqrt(sumSq / static_cast<float>(numSamples));
+    const float rmsDb = 20.0f * std::log10(rms + 1e-10f);
+    outputLevelDb.store(rmsDb);
+
+#ifndef PARITY_HARNESS
     {
-        float sumSq = 0.0f;
-        for (int i = 0; i < numSamples; ++i)
-            sumSq += channelData[i] * channelData[i];
-        const float rms = std::sqrt(sumSq / static_cast<float>(numSamples));
-        const float rmsDb = 20.0f * std::log10(rms + 1e-10f);
-        outputLevelDb.store(rmsDb);
+        static int debugCounter = 0;
+        if (++debugCounter % (48000 * 2 / numSamples) == 0)
+        {
+            const char* scLabel = (hpIdx == 0) ? "OFF" : "ON";
+            const char* cmpLabel = compressorOn ? "ON" : "OFF";
+#ifdef _WIN32
+            char buf[256];
+            snprintf(buf, sizeof(buf),
+                     "PROC  | vi=%.1f(%d) vo=%.1f(%d) sc=%s cmp=%s | vern=%.2fdB anchor=+3.95",
+                     inputVernierVal, (int)((inputVernierVal + 1.0f) * 5.0f + 0.5f),
+                     outputVernierVal, (int)((outputVernierVal + 1.0f) * 5.0f + 0.5f),
+                     scLabel, cmpLabel, vernierDb);
+            OutputDebugStringA(buf);
+            snprintf(buf, sizeof(buf),
+                     "PROC  | OUT=%.2f dBFS", rmsDb);
+            OutputDebugStringA(buf);
+#else
+            std::printf("PROC  | vi=%.1f(%d) vo=%.1f(%d) sc=%s cmp=%s | vern=%.2fdB anchor=+%.2f\n",
+                        inputVernierVal, (int)((inputVernierVal + 1.0f) * 5.0f + 0.5f),
+                        outputVernierVal, (int)((outputVernierVal + 1.0f) * 5.0f + 0.5f),
+                        scLabel, cmpLabel, vernierDb, kGainAnchorDb);
+            std::printf("PROC  | OUT=%.2f dBFS\n", rmsDb);
+#endif
+        }
     }
+#endif
 }
 
 bool BM176AudioProcessor::hasEditor() const { return true; }
