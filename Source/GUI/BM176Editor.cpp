@@ -66,7 +66,7 @@ namespace bm176
         addAndMakeVisible(vuMeter);
 
         // === Interstage switch ===
-        interstageSwitch.setLabels("", "OUT", "IN");
+        interstageSwitch.setLabels("OUT", "", "IN");
         interstageSwitch.setState(true);
         interstageSwitch.setCallback([this](bool on) {
             apvts.getParameter("interstage")->beginChangeGesture();
