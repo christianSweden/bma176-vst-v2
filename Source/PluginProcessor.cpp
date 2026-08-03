@@ -3,6 +3,10 @@
 #include "dsp/Conditioning.h"
 #include <cmath>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 BM176AudioProcessor::BM176AudioProcessor()
     : juce::AudioProcessor(BusesProperties()
         .withInput("Input", juce::AudioChannelSet::stereo(), true)
