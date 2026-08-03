@@ -126,7 +126,7 @@ namespace bm176
         drawDiscreteLabels(g, 196.0f, 103.0f, 41.0f,
             juce::StringArray{"I.5:I", "2:I", "4:I", "8:I", "I2:I"},
             juce::StringArray{"-60", "-30", "0", "30", "60"}, false,
-            juce::StringArray{"0", "-5", "-10", "-5", "0"});
+            juce::StringArray{"5", "-5", "-10", "-5", "5"});
         drawDiscreteLabels(g, 196.0f, 264.0f, 41.0f,
             juce::StringArray{"OFF", "45", "80", "I20", "I50", "200"},
             juce::StringArray{"-75", "-45", "-15", "15", "45", "75"}, false,
