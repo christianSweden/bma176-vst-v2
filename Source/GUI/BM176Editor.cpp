@@ -28,7 +28,7 @@ namespace bm176
         addAndMakeVisible(meterKnob);
 
         vernierInKnob.setVernierMode(true);
-        vernierInKnob.setValue(0.0f);
+        vernierInKnob.setValue(-1.0f);
         addAndMakeVisible(vernierInKnob);
 
         thresholdKnob.setValue(5.0f);
@@ -47,7 +47,7 @@ namespace bm176
         addAndMakeVisible(attackKnob);
 
         vernierOutKnob.setVernierMode(true);
-        vernierOutKnob.setValue(0.0f);
+        vernierOutKnob.setValue(-1.0f);
         addAndMakeVisible(vernierOutKnob);
 
         outputKnob.setIsBig(true);
