@@ -22,6 +22,7 @@ public:
     void computeCoeffs(BiquadType type, float gainDb, float cutoffHz, float q,
                         double sampleRate) noexcept;
     float processSample(float x) noexcept;
+    void process(float* buffer, int numSamples) noexcept;
     void reset() noexcept;
 
 private:

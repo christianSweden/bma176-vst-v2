@@ -95,6 +95,12 @@ float Biquad::processSample(float x) noexcept
     return std::clamp(y, -1.0f, 1.0f);
 }
 
+void Biquad::process(float* buffer, int numSamples) noexcept
+{
+    for (int n = 0; n < numSamples; ++n)
+        buffer[n] = processSample(buffer[n]);
+}
+
 void Biquad::reset() noexcept
 {
     x1_ = x2_ = y1_ = y2_ = 0.0f;
