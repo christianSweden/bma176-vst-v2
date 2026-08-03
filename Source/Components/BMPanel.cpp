@@ -119,12 +119,20 @@ namespace bm176
             std::vector<float>{-150.0f, -120.0f, -90.0f, -67.5f, -45.0f, 0.0f, 45.0f, 67.5f, 90.0f, 120.0f, 150.0f},
             3.25f, 1.236f);
 
-        drawKnobScaleNumbers(g, 1364.0f, 88.0f, 41.0f, smallNums, smallAngles);
-        drawKnobDots(g, 1364.0f, 88.0f, 41.0f, 21, -150.0f, 150.0f);
+        drawKnobScaleNumbers(g, 1364.0f, 88.0f, 41.0f, smallNums, smallAngles,
+            juce::StringArray{"0", "3", "-3", "0"},
+            juce::StringArray{"0", "-3", "-3", "0"}, 14.0f);
+        drawKnobDotsAt(g, 1364.0f, 88.0f, 41.0f,
+            std::vector<float>{-150.0f, -120.0f, -90.0f, -67.5f, -45.0f, 0.0f, 45.0f, 67.5f, 90.0f, 120.0f, 150.0f},
+            3.25f, 1.236f);
         drawEndWords(g, 1364.0f, 88.0f, 41.0f, "OFF", "FAST");
 
-        drawKnobScaleNumbers(g, 1734.0f, 88.0f, 41.0f, smallNums, smallAngles);
-        drawKnobDots(g, 1734.0f, 88.0f, 41.0f, 21, -150.0f, 150.0f);
+        drawKnobScaleNumbers(g, 1734.0f, 88.0f, 41.0f, smallNums, smallAngles,
+            juce::StringArray{"0", "3", "-3", "0"},
+            juce::StringArray{"0", "-3", "-3", "0"}, 14.0f);
+        drawKnobDotsAt(g, 1734.0f, 88.0f, 41.0f,
+            std::vector<float>{-150.0f, -120.0f, -90.0f, -67.5f, -45.0f, 0.0f, 45.0f, 67.5f, 90.0f, 120.0f, 150.0f},
+            3.25f, 1.236f);
         drawEndWords(g, 1734.0f, 88.0f, 41.0f, "SLOW", "FAST");
 
         drawDiscreteLabels(g, 196.0f, 103.0f, 41.0f,
