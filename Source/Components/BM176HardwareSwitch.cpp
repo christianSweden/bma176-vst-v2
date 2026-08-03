@@ -62,9 +62,7 @@ namespace bm176
         dragging = true;
         dragOrigin = actuatorY;
         dragY = e.y;
-
-        const float midpoint = (slotTopY() + slotBottomY()) * 0.5f;
-        setState(actuatorY > midpoint);
+        setState(!state);
     }
 
     void BM176HardwareSwitch::mouseDrag(const juce::MouseEvent& e)
