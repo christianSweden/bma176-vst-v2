@@ -57,6 +57,8 @@ namespace bm176
         {
             value = newValue;
             repaint();
+            if (onValueChange)
+                onValueChange(value);
         }
     }
 

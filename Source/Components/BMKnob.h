@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <juce_gui_basics/juce_gui_basics.h>
 
 namespace bm176
@@ -26,6 +27,8 @@ namespace bm176
         void setVernierMode(bool vernier);
         void setAngleRange(float minDeg, float maxDeg);
         void setValueRange(float minV, float maxV);
+
+        std::function<void(float)> onValueChange;
 
     protected:
         virtual float snapValue(float raw) const;

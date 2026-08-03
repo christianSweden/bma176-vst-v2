@@ -50,6 +50,25 @@ juce_add_plugin(BM176
     Source/Components/BMLED.cpp
     Source/Components/BMJackSocket.h
     Source/Components/BMJackSocket.cpp
+
+    Source/dsp/Biquad.h
+    Source/dsp/Biquad.cpp
+    Source/dsp/Conditioning.h
+    Source/dsp/GainProcessor.h
+    Source/dsp/GainProcessor.cpp
+    Source/dsp/GreyBoxChain.h
+    Source/dsp/GreyBoxChain.cpp
+    Source/dsp/MlpController.h
+    Source/dsp/MlpController.cpp
+    Source/dsp/ParametricEqProcessor.h
+    Source/dsp/ParametricEqProcessor.cpp
+    Source/dsp/RationalNonlinearity.h
+    Source/dsp/RationalNonlinearity.cpp
+    Source/dsp/SirenNonlinearity.h
+    Source/dsp/SirenNonlinearity.cpp
+    Source/dsp/VariMuDrcProcessor.h
+    Source/dsp/VariMuDrcProcessor.cpp
+    Source/dsp/generated/UA176Weights.h
 )
 
 target_sources(BM176 PRIVATE
@@ -66,6 +85,14 @@ target_sources(BM176 PRIVATE
     Source/Components/BMVU.cpp
     Source/Components/BMLED.cpp
     Source/Components/BMJackSocket.cpp
+    Source/dsp/Biquad.cpp
+    Source/dsp/GainProcessor.cpp
+    Source/dsp/GreyBoxChain.cpp
+    Source/dsp/MlpController.cpp
+    Source/dsp/ParametricEqProcessor.cpp
+    Source/dsp/RationalNonlinearity.cpp
+    Source/dsp/SirenNonlinearity.cpp
+    Source/dsp/VariMuDrcProcessor.cpp
 )
 
 target_link_libraries(BM176 PUBLIC

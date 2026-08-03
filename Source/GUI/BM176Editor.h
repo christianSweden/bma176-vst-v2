@@ -1,6 +1,7 @@
 #pragma once
 
 #include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_audio_processors/juce_audio_processors.h>
 #include "../Components/BMPanel.h"
 #include "../Components/BMContinuousKnob.h"
 #include "../Components/BMDiscreteKnob.h"
@@ -12,14 +13,24 @@
 
 namespace bm176
 {
-    class BM176Editor : public juce::Component
+    class BM176Editor : public juce::Component,
+                        private juce::AudioProcessorValueTreeState::Listener
     {
     public:
-        BM176Editor();
+        BM176Editor(juce::AudioProcessorValueTreeState& apvts);
+        ~BM176Editor() override;
         void resized() override;
         void paint(juce::Graphics&) override {}
 
+        using MeterSource = std::function<float()>;
+        void setMeterSources(MeterSource gainReduction, MeterSource inputLevel,
+                             MeterSource outputLevel);
+
+        void timerCallback();
+
     private:
+        void parameterChanged(const juce::String& parameterID, float newValue) override;
+
         BMPanel panel;
 
         BMDiscreteKnob  ratioKnob;
@@ -45,6 +56,14 @@ namespace bm176
         BMJackSocket inputJack;
         BMJackSocket hiZJack;
         BMJackSocket outputJack;
+
+        juce::AudioProcessorValueTreeState& apvts;
+
+        MeterSource getGainReductionFn;
+        MeterSource getInputLevelFn;
+        MeterSource getOutputLevelFn;
+
+        int meterModeIdx = 1;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BM176Editor)
     };
