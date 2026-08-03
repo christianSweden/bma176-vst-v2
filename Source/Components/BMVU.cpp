@@ -220,7 +220,7 @@ namespace bm176
         const float markY = glassH - 30.0f;
         const float capH = 26.0f;
 
-        juce::Font wmFont(juce::FontOptions().withHeight(capH * 0.85f).withStyle("bold"));
+        juce::Font wmFont(juce::FontOptions().withHeight(capH));
         juce::GlyphArrangement ga;
         ga.addLineOfText(wmFont, "bma", 0.0f, 0.0f);
         juce::Rectangle<float> wmBounds = ga.getBoundingBox(0, -1, true);
