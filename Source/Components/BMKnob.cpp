@@ -119,6 +119,21 @@ namespace bm176
         drawRimHighlight(g);
         drawTopFace(g);
         drawPointer(g);
+        drawAO(g);
+    }
+
+    void BMKnob::drawAO(juce::Graphics& g)
+    {
+        const float cx = getWidth() * 0.5f;
+        const float cy = getHeight() * 0.5f;
+        const float R = knobRadius();
+        const float aoR = R * 1.02f;
+
+        juce::ColourGradient ao(
+            juce::Colours::black.withAlpha(0.28f), cx, cy + aoR,
+            juce::Colours::black.withAlpha(0.0f), cx, cy, false);
+        g.setGradientFill(ao);
+        g.fillEllipse(cx - aoR, cy - aoR, aoR * 2.0f, aoR * 2.0f);
     }
 
     void BMKnob::drawShadow(juce::Graphics& g)
@@ -126,14 +141,14 @@ namespace bm176
         const float cx = getWidth() * 0.5f;
         const float cy = getHeight() * 0.5f;
         const float R = knobRadius();
-        float shadowAlpha = isBig ? 0.55f : 0.50f;
+        float shadowAlpha = isBig ? 0.50f : 0.45f;
         int   shadowBlur  = isBig ? 14 : 9;
 
         juce::Path sp;
-        sp.addEllipse(juce::Rectangle<float>(cx - R, cy - R, R * 2.0f, R * 2.0f));
+        sp.addEllipse(juce::Rectangle<float>(cx - R, cy - R + 3.0f, R * 2.0f, R * 2.0f));
         juce::DropShadow ds(
             juce::Colours::black.withAlpha(shadowAlpha), shadowBlur,
-            isBig ? juce::Point<int>(0, 5) : juce::Point<int>(0, 3));
+            isBig ? juce::Point<int>(1, 6) : juce::Point<int>(1, 4));
         ds.drawForPath(g, sp);
     }
 
@@ -145,16 +160,19 @@ namespace bm176
 
         juce::Path skirt;
         skirt.addEllipse(juce::Rectangle<float>(cx - R, cy - R, R * 2.0f, R * 2.0f));
-        juce::ColourGradient skirtGrad(knobLight, cx - R * 0.55f, cy - R * 0.55f,
-                                       knobDark, cx + R, cy + R, true);
+        juce::ColourGradient skirtGrad(knobLight, cx - R * 0.5f, cy - R * 0.5f,
+                                       knobDark, cx + R * 0.8f, cy + R * 0.8f, true);
         g.setGradientFill(skirtGrad);
         g.fillPath(skirt);
 
         juce::ColourGradient topLight(
-            juce::Colours::white.withAlpha(0.10f), cx, cy - R,
+            juce::Colours::white.withAlpha(0.08f), cx, cy - R * 0.8f,
             juce::Colours::white.withAlpha(0.0f),  cx, cy, false);
         g.setGradientFill(topLight);
         g.fillPath(skirt);
+
+        g.setColour(juce::Colours::black.withAlpha(0.25f));
+        g.drawEllipse(cx - R, cy - R, R * 2.0f, R * 2.0f, 1.2f);
     }
 
     void BMKnob::drawKnurling(juce::Graphics& g)
@@ -173,9 +191,12 @@ namespace bm176
             const float x2 = cx + R * std::cos(a);
             const float y2 = cy + R * std::sin(a);
 
+            const float topLight = std::max(0.0f, -std::sin(a));
+            const float alpha = topLight * 0.08f;
+
             g.setColour((i % 2 == 0)
-                ? knobFluteLight.withAlpha(0.35f)
-                : knobFluteDark.withAlpha(0.45f));
+                ? knobFluteLight.withAlpha(0.30f + alpha)
+                : knobFluteDark.withAlpha(0.40f + alpha));
             g.drawLine(x1, y1, x2, y2, 1.4f);
         }
     }
@@ -187,9 +208,9 @@ namespace bm176
         const float R = knobRadius();
 
         juce::Path arc;
-        arc.addCentredArc(cx, cy, R * 0.98f, R * 0.98f, 0.0f,
+        arc.addCentredArc(cx, cy, R * 0.97f, R * 0.97f, 0.0f,
             juce::degreesToRadians(200.0f), juce::degreesToRadians(340.0f), true);
-        g.setColour(knobRimHi.withAlpha(0.40f));
+        g.setColour(knobRimHi.withAlpha(0.35f));
         g.strokePath(arc, juce::PathStrokeType(2.0f));
     }
 
@@ -202,12 +223,22 @@ namespace bm176
 
         juce::Path face;
         face.addEllipse(juce::Rectangle<float>(cx - faceR, cy - faceR, faceR * 2.0f, faceR * 2.0f));
-        juce::ColourGradient faceGrad(knobFaceTop, cx, cy - faceR, knobFaceBottom, cx, cy + faceR, false);
+        juce::ColourGradient faceGrad(knobFaceTop, cx - faceR * 0.3f, cy - faceR * 0.3f,
+                                      knobFaceBottom, cx + faceR * 0.3f, cy + faceR * 0.3f, false);
         g.setGradientFill(faceGrad);
         g.fillPath(face);
 
-        g.setColour(juce::Colours::black.withAlpha(0.50f));
+        juce::ColourGradient metalInlay(
+            screwTop.brighter(0.1f).withAlpha(0.15f), cx - faceR * 0.5f, cy - faceR * 0.5f,
+            screwBottom.darker(0.1f).withAlpha(0.05f), cx + faceR * 0.5f, cy + faceR * 0.5f, false);
+        g.setGradientFill(metalInlay);
+        g.fillPath(face);
+
+        g.setColour(juce::Colours::black.withAlpha(0.45f));
         g.drawEllipse(cx - faceR, cy - faceR, faceR * 2.0f, faceR * 2.0f, 2.0f);
+
+        g.setColour(juce::Colours::white.withAlpha(0.04f));
+        g.drawEllipse(cx - faceR + 1.0f, cy - faceR + 1.0f, (faceR - 1.0f) * 2.0f, (faceR - 1.0f) * 2.0f, 1.0f);
     }
 
     void BMKnob::drawPointer(juce::Graphics& g)
@@ -226,15 +257,21 @@ namespace bm176
 
         juce::Path ptr;
         ptr.addLineSegment(juce::Line<float>(x1, y1, x2, y2), 0.0f);
-
         juce::PathStrokeType stroke(ptrW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
 
-        g.setColour(juce::Colours::black.withAlpha(0.45f));
         juce::Path shadowPtr;
         stroke.createStrokedPath(shadowPtr, ptr, juce::AffineTransform::translation(0.0f, 1.5f));
+        g.setColour(juce::Colours::black.withAlpha(0.40f));
         g.fillPath(shadowPtr);
 
-        g.setColour(pointerWhite);
+        g.setColour(pointerWhite.darker(0.05f));
         g.strokePath(ptr, stroke);
+
+        juce::Path bevelPtr;
+        juce::PathStrokeType bevelStroke(ptrW * 0.4f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
+        juce::Path bv;
+        bevelStroke.createStrokedPath(bv, ptr, juce::AffineTransform::translation(0.0f, -ptrW * 0.2f));
+        g.setColour(pointerWhite.brighter(0.15f).withAlpha(0.5f));
+        g.fillPath(bv);
     }
 }

@@ -24,7 +24,7 @@ namespace bm176
         bool state = true;
         float animT = 1.0f;
         float animTarget = 1.0f;
-        static constexpr float animDuration = 0.07f;
+        float animVelocity = 0.0f;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BMToggleSwitch)
     };

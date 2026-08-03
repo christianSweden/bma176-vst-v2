@@ -20,10 +20,20 @@ namespace bm176
         juce::Random rng(0x42);
         for (int y = 0; y < h; ++y)
         {
-            const float a = rng.nextFloat() * 0.03f + 0.02f;
+            const float a = rng.nextFloat() * 0.012f + 0.006f;
             tg.setColour(juce::Colour(1.0f, 1.0f, 1.0f).withAlpha(a));
             tg.drawLine(0.0f, static_cast<float>(y), static_cast<float>(w), static_cast<float>(y), 1.0f);
         }
+
+        for (int i = 0; i < 200; ++i)
+        {
+            const float x = rng.nextFloat() * static_cast<float>(w);
+            const float y = rng.nextFloat() * static_cast<float>(h);
+            const float a = rng.nextFloat() * 0.008f;
+            tg.setColour(juce::Colour(1.0f, 1.0f, 1.0f).withAlpha(a));
+            tg.fillEllipse(x, y, rng.nextFloat() * 3.0f + 1.0f, rng.nextFloat() * 2.0f + 1.0f);
+        }
+
         textureBuilt = true;
     }
 
@@ -39,17 +49,20 @@ namespace bm176
         g.setGradientFill(panelGrad);
         g.fillAll();
 
+        juce::ColourGradient darkCorners(
+            juce::Colours::black.withAlpha(0.0f), w * 0.5f, h * 0.5f,
+            juce::Colours::black.withAlpha(0.15f), w, h, true);
+        g.setGradientFill(darkCorners);
+        g.fillAll();
+
         g.setOpacity(1.0f);
         g.drawImageAt(brushedTexture, 0, 0, false);
 
-        g.setColour(panelEdgeHi.withAlpha(0.25f));
+        g.setColour(panelEdgeHi.withAlpha(0.20f));
         g.drawLine(0.0f, 0.0f, w, 0.0f, 2.0f);
 
-        juce::ColourGradient vignette(
-            juce::Colours::black.withAlpha(0.0f), w * 0.5f, h * 0.5f,
-            juce::Colours::black.withAlpha(0.12f), w, h, true);
-        g.setGradientFill(vignette);
-        g.fillAll();
+        g.setColour(juce::Colours::black.withAlpha(0.06f));
+        g.drawLine(0.0f, h - 1.0f, w, h - 1.0f, 1.0f);
 
         constexpr float inset = 11.0f;
         constexpr float cr = 6.0f;
@@ -83,7 +96,6 @@ namespace bm176
         drawSectionLabel(g, 1243.0f, 118.0f, 16.0f, "INTERSTAGE");
         drawSectionLabel(g, 1243.0f, 140.0f, 12.0f, "IN");
         drawSectionLabel(g, 1243.0f, 248.0f, 12.0f, "OUT");
-        drawSectionLabel(g, 1243.0f, 256.0f, 13.0f, "COMP");
         drawSectionLabel(g, 1364.0f,  24.0f, 16.0f, "ATTACK");
         drawSectionLabel(g, 1364.0f, 207.0f, 16.0f, "VERNIER");
         drawSectionLabel(g, 1555.0f,  44.0f, 18.0f, "OUTPUT");
@@ -91,9 +103,9 @@ namespace bm176
         drawSectionLabel(g, 1848.0f,  26.0f, 13.0f, "IN");
         drawSectionLabel(g, 1848.0f, 134.0f, 13.0f, "BYPASS");
         drawSectionLabel(g, 1848.0f, 196.0f, 13.0f, "ON");
+        drawSectionLabel(g, 1243.0f, 256.0f, 13.0f, "COMP");
 
-        juce::StringArray inputLabels;
-        juce::StringArray inputAngles;
+        juce::StringArray inputLabels, inputAngles;
         for (int v = 40; v >= 0; v -= 4) {
             inputLabels.add(hwString(v));
             inputAngles.add(juce::String((static_cast<float>(v) - 20.0f) * 7.5f));
@@ -102,8 +114,7 @@ namespace bm176
             {}, {}, 15.0f, 1.324f);
         drawKnobDots(g, 376.0f, 171.0f, 79.0f, 21, -150.0f, 150.0f, 1.134f);
 
-        juce::StringArray outputLabels;
-        juce::StringArray outputAngles;
+        juce::StringArray outputLabels, outputAngles;
         for (int v = 40; v >= 0; v -= 4) {
             outputLabels.add(hwString(v));
             outputAngles.add(juce::String((static_cast<float>(v) - 20.0f) * 7.5f));
@@ -114,6 +125,7 @@ namespace bm176
 
         juce::StringArray smallNums{"2", "4", "6", "8"};
         juce::StringArray smallAngles{"-90", "-45", "45", "90"};
+
         drawKnobScaleNumbers(g, 679.0f, 166.0f, 41.0f, smallNums, smallAngles,
             juce::StringArray{"0", "2", "-2", "0"},
             juce::StringArray{"0", "-3", "-3", "0"}, 14.0f);
@@ -164,8 +176,8 @@ namespace bm176
             juce::Graphics::ScopedSaveState ss(g);
             if (needsScaling)
                 g.addTransform(juce::AffineTransform::scale(0.88f, 1.0f).translated(cx * 0.136f, 0.0f));
-            drawTrackedText(g, text.toUpperCase(), font, textMain.withAlpha(0.92f),
-                           cx, cy, 0.12f, textShadow.withAlpha(0.55f));
+            drawTrackedText(g, text.toUpperCase(), font, textMain.withAlpha(0.80f),
+                           cx, cy, 0.12f, textShadow.withAlpha(0.40f));
         }
     }
 
@@ -179,7 +191,7 @@ namespace bm176
     {
         const float ringR = ringFactor * R;
         g.setFont(juce::Font(juce::FontOptions().withHeight(fontSize)));
-        g.setColour(dotColour.withAlpha(0.85f));
+        g.setColour(dotColour.withAlpha(0.80f));
         for (int i = 0; i < labels.size() && i < angles.size(); ++i)
         {
             const float aDeg = angles[i].getFloatValue();
@@ -200,7 +212,7 @@ namespace bm176
         const float ringR = ringFactor * R;
         if (dotSize < 0.0f)
             dotSize = (R > 70.0f) ? 3.0f : 2.25f;
-        g.setColour(dotColour.withAlpha(0.85f));
+        g.setColour(dotColour.withAlpha(0.80f));
         for (float aDeg : angles)
         {
             const float aRad = juce::degreesToRadians(aDeg);
@@ -217,7 +229,7 @@ namespace bm176
         const float dotSize = (R > 70.0f) ? 3.0f : 2.25f;
         const int n = count;
         const float range = maxAngle - minAngle;
-        g.setColour(dotColour.withAlpha(0.85f));
+        g.setColour(dotColour.withAlpha(0.80f));
         for (int i = 0; i < n; ++i)
         {
             const float t = (n > 1) ? static_cast<float>(i) / static_cast<float>(n - 1) : 0.0f;
@@ -234,7 +246,7 @@ namespace bm176
     {
         const float ringR = 1.62f * R;
         g.setFont(juce::Font(juce::FontOptions().withHeight(12.0f)));
-        g.setColour(textMain.withAlpha(0.75f));
+        g.setColour(textMain.withAlpha(0.65f));
         {
             const float aRad = juce::degreesToRadians(-150.0f);
             const float lx = cx + ringR * std::sin(aRad);
@@ -260,7 +272,7 @@ namespace bm176
         const float rx = 1.55f * R;
         const float ry = 1.05f * R;
         g.setFont(juce::Font(juce::FontOptions().withHeight(12.0f)));
-        g.setColour(textMain.withAlpha(0.85f));
+        g.setColour(textMain.withAlpha(0.80f));
         for (int i = 0; i < labels.size() && i < angles.size(); ++i)
         {
             const float aDeg = angles[i].getFloatValue();
@@ -281,7 +293,7 @@ namespace bm176
                 const float aRad = juce::degreesToRadians(aDeg);
                 const float dx = cx + dotR * std::sin(aRad);
                 const float dy = cy - dotR * std::cos(aRad);
-                g.setColour(dotColour.withAlpha(0.85f));
+                g.setColour(dotColour.withAlpha(0.80f));
                 g.fillEllipse(dx - 2.5f, dy - 2.5f, 5.0f, 5.0f);
             }
         }
@@ -316,7 +328,7 @@ namespace bm176
         ga.moveRangeOfGlyphs(0, -1, cx - wmBounds.getCentreX(), cy - wmBounds.getCentreY());
         juce::Path wmPath;
         ga.createPath(wmPath);
-        g.setColour(textMain.withAlpha(0.75f));
+        g.setColour(textMain.withAlpha(0.65f));
         g.fillPath(wmPath);
 
         const float barBase = wmBounds.getBottom() - (cy - wmBounds.getCentreY());
@@ -344,8 +356,8 @@ namespace bm176
             juce::Graphics::ScopedSaveState ss(g);
             if (needsScaling)
                 g.addTransform(juce::AffineTransform::scale(0.88f, 1.0f).translated(cx * 0.136f, 0.0f));
-            drawTrackedText(g, text.toUpperCase(), font, textMain.withAlpha(0.92f),
-                           cx, y, trackingEm, textShadow.withAlpha(0.55f));
+            drawTrackedText(g, text.toUpperCase(), font, textMain.withAlpha(0.70f),
+                           cx, y, trackingEm, textShadow.withAlpha(0.35f));
         }
     }
 }

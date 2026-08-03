@@ -54,6 +54,7 @@ namespace bm176
         void drawRimHighlight(juce::Graphics& g);
         void drawTopFace(juce::Graphics& g);
         void drawPointer(juce::Graphics& g);
+        void drawAO(juce::Graphics& g);
 
         bool  snappedToDetent = false;
 
