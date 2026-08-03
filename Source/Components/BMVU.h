@@ -35,10 +35,14 @@ namespace bm176
         void drawNeedle(juce::Graphics& g);
         void drawGlare(juce::Graphics& g);
 
+        void drawStaticFace(juce::Graphics& g);
+
         float pctToAngle(float pct) const;
         juce::Point<float> pointOnArc(float radius, float angleDeg) const;
 
         float glassX = 0, glassY = 0, glassW = VU_GLASS_W, glassH = VU_GLASS_H;
+        juce::Image cachedFace;
+        bool faceCacheValid = false;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BMVU)
     };

@@ -59,7 +59,11 @@ namespace bm176
         void drawPointer(juce::Graphics& g);
         void drawAO(juce::Graphics& g);
 
+        void drawStaticLayers(juce::Graphics& g);
+
         bool  snappedToDetent = false;
+        juce::Image cachedStatic;
+        bool staticCacheValid = false;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BMKnob)
     };

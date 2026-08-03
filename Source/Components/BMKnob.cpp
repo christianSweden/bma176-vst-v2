@@ -17,11 +17,11 @@ namespace bm176
         return juce::jmin(getWidth(), getHeight()) * 0.5f;
     }
 
-    void BMKnob::setIsBig(bool b)    { isBig = b; }
+    void BMKnob::setIsBig(bool b)    { isBig = b; staticCacheValid = false; }
     void BMKnob::setDiscrete(bool d, int n) { isDiscrete = d; numPositions = juce::jmax(2, n); }
     void BMKnob::setCentreDetent(bool c) { centreDetent = c; }
     void BMKnob::setVernierMode(bool v)   { isVernier = v; }
-    void BMKnob::setAngleRange(float minDeg, float maxDeg) { minAngleDeg = minDeg; maxAngleDeg = maxDeg; }
+    void BMKnob::setAngleRange(float minDeg, float maxDeg) { minAngleDeg = minDeg; maxAngleDeg = maxDeg; staticCacheValid = false; }
     void BMKnob::setValueRange(float minV, float maxV) { minVal = minV; maxVal = maxV; }
 
     float BMKnob::angleFromValue(float v) const
@@ -111,16 +111,32 @@ namespace bm176
         }
     }
 
-    void BMKnob::resized() {}
+    void BMKnob::resized()
+    {
+        staticCacheValid = false;
+    }
 
     void BMKnob::paint(juce::Graphics& g)
+    {
+        if (!staticCacheValid || !cachedStatic.isValid()
+            || cachedStatic.getWidth() != getWidth() || cachedStatic.getHeight() != getHeight())
+        {
+            cachedStatic = juce::Image(juce::Image::ARGB, getWidth(), getHeight(), true);
+            juce::Graphics cg(cachedStatic);
+            drawStaticLayers(cg);
+            staticCacheValid = true;
+        }
+        g.drawImageAt(cachedStatic, 0, 0);
+        drawPointer(g);
+    }
+
+    void BMKnob::drawStaticLayers(juce::Graphics& g)
     {
         drawShadow(g);
         drawSkirt(g);
         drawKnurling(g);
         drawRimHighlight(g);
         drawTopFace(g);
-        drawPointer(g);
         drawAO(g);
     }
 

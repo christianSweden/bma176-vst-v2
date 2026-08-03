@@ -52,7 +52,10 @@ namespace bm176
         }
     }
 
-    void BMVU::resized() {}
+    void BMVU::resized()
+    {
+        faceCacheValid = false;
+    }
 
     void BMVU::paint(juce::Graphics& g)
     {
@@ -63,23 +66,42 @@ namespace bm176
         glassW = VU_GLASS_W;
         glassH = VU_GLASS_H;
 
-        drawBezel(g);
-        drawGlassRecess(g);
+        if (!faceCacheValid || !cachedFace.isValid()
+            || cachedFace.getWidth() != getWidth() || cachedFace.getHeight() != getHeight())
+        {
+            cachedFace = juce::Image(juce::Image::ARGB, getWidth(), getHeight(), true);
+            juce::Graphics cg(cachedFace);
+            drawStaticFace(cg);
+            faceCacheValid = true;
+        }
+        g.drawImageAt(cachedFace, 0, 0);
 
+        // Dynamic layers: needle + glare overlay
         {
             juce::Graphics::ScopedSaveState ss(g);
             g.reduceClipRegion(juce::roundToInt(glassX), juce::roundToInt(glassY),
                               juce::roundToInt(glassW), juce::roundToInt(glassH));
             g.addTransform(juce::AffineTransform::translation(glassX, glassY));
+            drawNeedle(g);
+        }
+        drawGlare(g);
+    }
 
+    void BMVU::drawStaticFace(juce::Graphics& g)
+    {
+        drawBezel(g);
+        drawGlassRecess(g);
+        {
+            juce::Graphics::ScopedSaveState ss(g);
+            g.reduceClipRegion(juce::roundToInt(glassX), juce::roundToInt(glassY),
+                              juce::roundToInt(glassW), juce::roundToInt(glassH));
+            g.addTransform(juce::AffineTransform::translation(glassX, glassY));
             drawFaceBg(g);
             drawRedArc(g);
             drawDbScale(g);
             drawPctScale(g);
             drawFaceDecor(g);
-            drawNeedle(g);
         }
-        drawGlare(g);
     }
 
     void BMVU::drawBezel(juce::Graphics& g)
