@@ -35,9 +35,9 @@ namespace bm176
 
         BMVU vuMeter;
 
-        BMToggleSwitch interstageSwitch;
-        BMToggleSwitch attackOffSwitch;
-        BMToggleSwitch powerSwitch;
+        BM176HardwareSwitch interstageSwitch;
+        BM176HardwareSwitch attackOffSwitch;
+        BM176HardwareSwitch powerSwitch;
         BM176HardwareSwitch bypassSwitch;
 
         BMLED onLamp;

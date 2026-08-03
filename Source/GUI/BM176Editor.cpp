@@ -36,9 +36,11 @@ namespace bm176
 
         addAndMakeVisible(vuMeter);
 
+        interstageSwitch.setLabels("", "OUT", "IN");
         interstageSwitch.setState(true);
         addAndMakeVisible(interstageSwitch);
 
+        attackOffSwitch.setLabels("", "OFF", "ON");
         attackOffSwitch.setState(true);
         addAndMakeVisible(attackOffSwitch);
 
@@ -65,6 +67,7 @@ namespace bm176
         onLamp.setState(true);
         addAndMakeVisible(onLamp);
 
+        powerSwitch.setLabels("", "OFF", "ON");
         powerSwitch.setState(true);
         addAndMakeVisible(powerSwitch);
 
@@ -101,10 +104,15 @@ namespace bm176
         placeCircle(outputKnob,    1555.0f, 171.0f, 158.0f);
         placeCircle(releaseKnob,   1734.0f,  88.0f, 82.0f);
 
-        placeToggle(interstageSwitch, 1243.0f, 196.0f);
-        placeToggle(attackOffSwitch,  1243.0f, 268.0f);
-        bypassSwitch.setBounds(juce::roundToInt(1848.0f - 18.0f), juce::roundToInt(88.0f - 12.0f - 38.0f), 36, 100);
-        placeToggle(powerSwitch,      1848.0f, 254.0f);
+        auto placeSwitch = [&](juce::Component& c, float cx, float cy)
+        {
+            c.setBounds(juce::roundToInt(cx - 18.0f), juce::roundToInt(cy - 50.0f), 36, 100);
+        };
+
+        placeSwitch(interstageSwitch, 1243.0f, 196.0f);
+        placeSwitch(attackOffSwitch,  1243.0f, 268.0f);
+        bypassSwitch.setBounds(juce::roundToInt(1848.0f - 18.0f), juce::roundToInt(88.0f - 50.0f), 36, 100);
+        placeSwitch(powerSwitch,      1848.0f, 254.0f);
 
         vuMeter.setBounds(juce::roundToInt(VU_BEZEL_X), juce::roundToInt(VU_BEZEL_Y),
                           juce::roundToInt(VU_BEZEL_W), juce::roundToInt(VU_BEZEL_H));
