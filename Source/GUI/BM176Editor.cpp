@@ -112,12 +112,12 @@ namespace bm176
         placeSwitch(interstageSwitch, 1243.0f, 176.0f);
         placeSwitch(attackOffSwitch,  1243.0f, 303.0f);
         bypassSwitch.setBounds(juce::roundToInt(1848.0f - 18.0f), juce::roundToInt(88.0f - 50.0f), 36, 100);
-        placeSwitch(powerSwitch,      1848.0f, 254.0f);
+        placeSwitch(powerSwitch,      1848.0f, 274.0f);
 
         vuMeter.setBounds(juce::roundToInt(VU_BEZEL_X), juce::roundToInt(VU_BEZEL_Y),
                           juce::roundToInt(VU_BEZEL_W), juce::roundToInt(VU_BEZEL_H));
 
-        placeCircle(onLamp,  1762.0f, 254.0f, 30.0f);
+        placeCircle(onLamp,  1777.0f, 254.0f, 30.0f);
         placeCircle(inputJack,  90.0f,  77.0f, 46.0f);
         placeCircle(hiZJack,    90.0f, 171.0f, 46.0f);
         placeCircle(outputJack, 90.0f, 254.0f, 46.0f);
