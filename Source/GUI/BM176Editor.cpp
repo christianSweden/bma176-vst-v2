@@ -58,6 +58,7 @@ namespace bm176
         releaseKnob.setValue(5.0f);
         addAndMakeVisible(releaseKnob);
 
+        bypassSwitch.setLabels("", "IN", "BYPASS");
         bypassSwitch.setState(true);
         addAndMakeVisible(bypassSwitch);
 
@@ -102,7 +103,7 @@ namespace bm176
 
         placeToggle(interstageSwitch, 1243.0f, 196.0f);
         placeToggle(attackOffSwitch,  1243.0f, 268.0f);
-        placeToggle(bypassSwitch,     1848.0f,  88.0f);
+        bypassSwitch.setBounds(juce::roundToInt(1848.0f - 18.0f), juce::roundToInt(88.0f - 12.0f - 38.0f), 36, 100);
         placeToggle(powerSwitch,      1848.0f, 254.0f);
 
         vuMeter.setBounds(juce::roundToInt(VU_BEZEL_X), juce::roundToInt(VU_BEZEL_Y),

@@ -5,6 +5,7 @@
 #include "../Components/BMContinuousKnob.h"
 #include "../Components/BMDiscreteKnob.h"
 #include "../Components/BMToggleSwitch.h"
+#include "../Components/BMVerticalSlideSwitch.h"
 #include "../Components/BMVU.h"
 #include "../Components/BMLED.h"
 #include "../Components/BMJackSocket.h"
@@ -36,8 +37,8 @@ namespace bm176
 
         BMToggleSwitch interstageSwitch;
         BMToggleSwitch attackOffSwitch;
-        BMToggleSwitch bypassSwitch;
         BMToggleSwitch powerSwitch;
+        BMVerticalSlideSwitch bypassSwitch;
 
         BMLED onLamp;
 
