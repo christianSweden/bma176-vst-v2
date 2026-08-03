@@ -100,7 +100,7 @@ namespace bm176
         drawSectionLabel(g, 1253.0f, 252.0f, 12.0f, "ATTACK");
         drawSectionLabel(g, 1253.0f, 266.0f, 12.0f, "OFF");
         drawSectionLabel(g, 1364.0f,  24.0f, 16.0f, "ATTACK");
-        drawSectionLabel(g, 1364.0f, 196.0f, 16.0f, "VERNIER");
+        drawSectionLabel(g, 1364.0f, 207.0f, 16.0f, "VERNIER");
         drawSectionLabel(g, 1555.0f,  44.0f, 18.0f, "OUTPUT");
         drawSectionLabel(g, 1734.0f,  24.0f, 16.0f, "RELEASE");
         drawSectionLabel(g, 1848.0f,  51.0f, 13.0f, "IN");
