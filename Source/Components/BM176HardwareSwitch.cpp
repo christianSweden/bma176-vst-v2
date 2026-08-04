@@ -11,16 +11,18 @@ namespace bm176
 
     BM176HardwareSwitch::~BM176HardwareSwitch() { stopTimer(); }
 
-    void BM176HardwareSwitch::setState(bool on)
+    void BM176HardwareSwitch::setState(bool on, juce::NotificationType n)
     {
-        if (state != on)
-        {
-            state = on;
-            targetY = state ? slotBottomY() : slotTopY();
-            if (!dragging)
-                velocity += state ? 80.0f : -80.0f;
-            if (onChange) onChange(state);
-        }
+        if (state == on) return;
+
+        state = on;
+        targetY = state ? slotBottomY() : slotTopY();
+        if (!dragging)
+            velocity += state ? 80.0f : -80.0f;
+        startTimerHz(60);
+
+        if (onStateVisual) onStateVisual(state);
+        if (n != juce::dontSendNotification && onChange) onChange(state);
     }
 
     bool BM176HardwareSwitch::getState() const { return state; }

@@ -1,5 +1,6 @@
 #include "BM176Editor.h"
 #include "BM176Geometry.h"
+#include <cmath>
 
 namespace bm176
 {
@@ -11,120 +12,58 @@ namespace bm176
         // === Ratio (discrete, 5 positions) ===
         ratioKnob.setDiscrete(true, 5);
         ratioKnob.setAngleRange(-75.0f, 75.0f);
-        ratioKnob.setValue(5.0f);
-        ratioKnob.onValueChange = [this](float v) {
-            const int idx = juce::roundToInt(v / 2.5f);
-            apvts.getParameter("ratio")->setValueNotifyingHost(idx / 4.0f);
-        };
         addAndMakeVisible(ratioKnob);
 
         // === Sidechain HP (discrete, 6 positions) ===
         sidechainKnob.setDiscrete(true, 6);
         sidechainKnob.setAngleRange(-90.0f, 90.0f);
-        sidechainKnob.setValue(0.0f);
-        sidechainKnob.onValueChange = [this](float v) {
-            const int idx = juce::roundToInt(v / 2.0f);
-            apvts.getParameter("sidechain")->setValueNotifyingHost(idx / 5.0f);
-        };
         addAndMakeVisible(sidechainKnob);
 
         // === Input (big, 21 detents) ===
         inputKnob.setIsBig(true);
         inputKnob.setDiscrete(true, 21);
-        inputKnob.setValue(5.0f);
-        inputKnob.onValueChange = [this](float v) {
-            apvts.getParameter("input")->setValueNotifyingHost(v / 10.0f);
-        };
         addAndMakeVisible(inputKnob);
 
         // === Meter mode (discrete, 3 positions) ===
         meterKnob.setDiscrete(true, 3);
         meterKnob.setAngleRange(-60.0f, 60.0f);
-        meterKnob.setValue(5.0f);
-        meterKnob.onValueChange = [this](float v) {
-            const int idx = juce::roundToInt(v / 5.0f);
-            meterModeIdx = juce::jlimit(0, 2, idx);
-            apvts.getParameter("meterMode")->setValueNotifyingHost(idx / 2.0f);
-        };
         addAndMakeVisible(meterKnob);
 
         // === Vernier In (-1 to 1, centre detent) ===
         vernierInKnob.setVernierMode(true);
-        vernierInKnob.setValue(-1.0f);
-        vernierInKnob.onValueChange = [this](float v) {
-            apvts.getParameter("inputVernier")->setValueNotifyingHost((v + 1.0f) / 2.0f);
-        };
         addAndMakeVisible(vernierInKnob);
 
         // === Threshold ===
-        thresholdKnob.setValue(5.0f);
-        thresholdKnob.onValueChange = [this](float v) {
-            apvts.getParameter("threshold")->setValueNotifyingHost(v / 10.0f);
-        };
         addAndMakeVisible(thresholdKnob);
 
         addAndMakeVisible(vuMeter);
 
         // === Interstage switch ===
         interstageSwitch.setLabels("OUT", "", "IN");
-        interstageSwitch.setState(true);
-        interstageSwitch.setCallback([this](bool on) {
-            apvts.getParameter("interstage")->beginChangeGesture();
-            apvts.getParameter("interstage")->setValueNotifyingHost(on ? 1.0f : 0.0f);
-            apvts.getParameter("interstage")->endChangeGesture();
-        });
         addAndMakeVisible(interstageSwitch);
 
         // === Attack OFF switch (maps to compressorOn) ===
         attackOffSwitch.setLabels("", "OFF", "ON");
-        attackOffSwitch.setState(true);
-        attackOffSwitch.setCallback([this](bool on) {
-            apvts.getParameter("compressorOn")->beginChangeGesture();
-            apvts.getParameter("compressorOn")->setValueNotifyingHost(on ? 1.0f : 0.0f);
-            apvts.getParameter("compressorOn")->endChangeGesture();
-        });
         addAndMakeVisible(attackOffSwitch);
 
         // === Attack (2-10 range, matches panel 2-8 + OFF switch) ===
         attackKnob.setValueRange(2.0f, 10.0f);
-        attackKnob.setValue(5.0f);
-        attackKnob.onValueChange = [this](float v) {
-            apvts.getParameter("attack")->setValueNotifyingHost(v / 10.0f);
-        };
         addAndMakeVisible(attackKnob);
 
         // === Vernier Out (-1 to 1, centre detent) ===
         vernierOutKnob.setVernierMode(true);
-        vernierOutKnob.setValue(-1.0f);
-        vernierOutKnob.onValueChange = [this](float v) {
-            apvts.getParameter("outputVernier")->setValueNotifyingHost((v + 1.0f) / 2.0f);
-        };
         addAndMakeVisible(vernierOutKnob);
 
         // === Output (big, 21 detents) ===
         outputKnob.setIsBig(true);
         outputKnob.setDiscrete(true, 21);
-        outputKnob.setValue(5.0f);
-        outputKnob.onValueChange = [this](float v) {
-            apvts.getParameter("output")->setValueNotifyingHost(v / 10.0f);
-        };
         addAndMakeVisible(outputKnob);
 
         // === Release ===
-        releaseKnob.setValue(5.0f);
-        releaseKnob.onValueChange = [this](float v) {
-            apvts.getParameter("release")->setValueNotifyingHost(v / 10.0f);
-        };
         addAndMakeVisible(releaseKnob);
 
         // === Bypass switch ===
         bypassSwitch.setLabels("", "IN", "BYPASS");
-        bypassSwitch.setState(false);
-        bypassSwitch.setCallback([this](bool on) {
-            apvts.getParameter("bypass")->beginChangeGesture();
-            apvts.getParameter("bypass")->setValueNotifyingHost(on ? 1.0f : 0.0f);
-            apvts.getParameter("bypass")->endChangeGesture();
-        });
         addAndMakeVisible(bypassSwitch);
 
         // === Power switch (decorative + disables audio when off) ===
@@ -132,41 +71,45 @@ namespace bm176
         addAndMakeVisible(onLamp);
 
         powerSwitch.setLabels("", "ON", "OFF");
-        powerSwitch.setState(false);
-        powerSwitch.setCallback([this](bool on) {
-            onLamp.setState(!on);
-            apvts.getParameter("power")->beginChangeGesture();
-            apvts.getParameter("power")->setValueNotifyingHost(on ? 0.0f : 1.0f);
-            apvts.getParameter("power")->endChangeGesture();
-        });
+        powerSwitch.onStateVisual = [this](bool on) { onLamp.setState(!on); };
         addAndMakeVisible(powerSwitch);
 
         addAndMakeVisible(inputJack);
         addAndMakeVisible(hiZJack);
         addAndMakeVisible(outputJack);
 
+        pMeterMode = apvts.getRawParameterValue("meterMode");
+
         setSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         panel.toBack();
 
-        apvts.addParameterListener("bypass", this);
-        apvts.addParameterListener("power", this);
-        apvts.addParameterListener("interstage", this);
-        apvts.addParameterListener("compressorOn", this);
-        apvts.addParameterListener("meterMode", this);
-        apvts.addParameterListener("inputVernier", this);
-        apvts.addParameterListener("outputVernier", this);
+        // Constructed last, once every knob above is fully configured: each binder's
+        // constructor fires an initial host->GUI update synchronously, and BMKnob::setValue()
+        // needs isVernier/isDiscrete/minVal/maxVal to already reflect their final settings.
+        ratioBinder = std::make_unique<BMKnobBinder>(apvtsRef, "ratio", ratioKnob,
+            [](float v) { return std::round(v / 2.5f); },
+            [](float v) { return v * 2.5f; });
+        sidechainBinder = std::make_unique<BMKnobBinder>(apvtsRef, "sidechain", sidechainKnob,
+            [](float v) { return std::round(v / 2.0f); },
+            [](float v) { return v * 2.0f; });
+        inputBinder = std::make_unique<BMKnobBinder>(apvtsRef, "input", inputKnob);
+        meterBinder = std::make_unique<BMKnobBinder>(apvtsRef, "meterMode", meterKnob,
+            [](float v) { return std::round(v / 5.0f); },
+            [](float v) { return v * 5.0f; });
+        vernierInBinder = std::make_unique<BMKnobBinder>(apvtsRef, "inputVernier", vernierInKnob);
+        thresholdBinder = std::make_unique<BMKnobBinder>(apvtsRef, "threshold", thresholdKnob);
+        attackBinder = std::make_unique<BMKnobBinder>(apvtsRef, "attack", attackKnob);
+        vernierOutBinder = std::make_unique<BMKnobBinder>(apvtsRef, "outputVernier", vernierOutKnob);
+        outputBinder = std::make_unique<BMKnobBinder>(apvtsRef, "output", outputKnob);
+        releaseBinder = std::make_unique<BMKnobBinder>(apvtsRef, "release", releaseKnob);
+
+        interstageBinder = std::make_unique<BMSwitchBinder>(apvtsRef, "interstage", interstageSwitch);
+        attackOffBinder  = std::make_unique<BMSwitchBinder>(apvtsRef, "compressorOn", attackOffSwitch);
+        bypassBinder     = std::make_unique<BMSwitchBinder>(apvtsRef, "bypass", bypassSwitch);
+        powerBinder      = std::make_unique<BMSwitchBinder>(apvtsRef, "power", powerSwitch, true);
     }
 
-    BM176Editor::~BM176Editor()
-    {
-        apvts.removeParameterListener("bypass", this);
-        apvts.removeParameterListener("power", this);
-        apvts.removeParameterListener("interstage", this);
-        apvts.removeParameterListener("compressorOn", this);
-        apvts.removeParameterListener("meterMode", this);
-        apvts.removeParameterListener("inputVernier", this);
-        apvts.removeParameterListener("outputVernier", this);
-    }
+    BM176Editor::~BM176Editor() = default;
 
     void BM176Editor::setMeterSources(MeterSource gainReduction,
                                        MeterSource inputLevel,
@@ -179,35 +122,18 @@ namespace bm176
 
     void BM176Editor::timerCallback()
     {
-        float dbVal = -96.0f;
-        switch (meterModeIdx)
-        {
-            case 0: if (getInputLevelFn)  dbVal = getInputLevelFn(); break;
-            case 1: if (getGainReductionFn) dbVal = getGainReductionFn(); break;
-            case 2: if (getOutputLevelFn) dbVal = getOutputLevelFn(); break;
-        }
-        vuMeter.setTargetDB(dbVal);
-    }
+        const int mode = juce::jlimit(0, 2, juce::roundToInt(pMeterMode->load()));
 
-    void BM176Editor::parameterChanged(const juce::String& parameterID, float newValue)
-    {
-        if (parameterID == "bypass")
-            bypassSwitch.setState(newValue >= 0.5f);
-        else if (parameterID == "power")
-            powerSwitch.setState(newValue < 0.5f);
-        else if (parameterID == "interstage")
-            interstageSwitch.setState(newValue >= 0.5f);
-        else if (parameterID == "compressorOn")
-            attackOffSwitch.setState(newValue >= 0.5f);
-        else if (parameterID == "meterMode")
+        float dbVal = -96.0f;
+        switch (mode)
         {
-            const int idx = juce::jlimit(0, 2, juce::roundToInt(newValue));
-            meterModeIdx = idx;
+            case 0: if (getInputLevelFn)    dbVal = getInputLevelFn();    break;
+            case 1: if (getGainReductionFn) dbVal = getGainReductionFn(); break;
+            case 2: if (getOutputLevelFn)   dbVal = getOutputLevelFn();   break;
         }
-        else if (parameterID == "inputVernier")
-            vernierInKnob.setValue(newValue * 2.0f - 1.0f);
-        else if (parameterID == "outputVernier")
-            vernierOutKnob.setValue(newValue * 2.0f - 1.0f);
+
+        vuMeter.setMode(mode == 1);
+        vuMeter.setTargetDB(dbVal);
     }
 
     void BM176Editor::resized()

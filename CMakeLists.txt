@@ -31,6 +31,8 @@ juce_add_plugin(BM176
     Source/GUI/BM176Colours.h
     Source/GUI/BM176Geometry.h
     Source/GUI/BM176Fonts.h
+    Source/GUI/BMParameterBinder.h
+    Source/GUI/BMParameterBinder.cpp
 
     Source/Components/BMPanel.h
     Source/Components/BMPanel.cpp
@@ -76,6 +78,7 @@ target_sources(BM176 PRIVATE
     Source/PluginEditor.cpp
     Source/GUI/BM176Editor.cpp
     Source/GUI/BM176LookAndFeel.cpp
+    Source/GUI/BMParameterBinder.cpp
     Source/Components/BMPanel.cpp
     Source/Components/BMKnob.cpp
     Source/Components/BMDiscreteKnob.cpp

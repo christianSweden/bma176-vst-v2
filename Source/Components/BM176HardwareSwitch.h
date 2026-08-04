@@ -17,7 +17,7 @@ namespace bm176
         void mouseDrag(const juce::MouseEvent& e) override;
         void mouseUp(const juce::MouseEvent& e) override;
 
-        void setState(bool on);
+        void setState(bool on, juce::NotificationType n = juce::sendNotification);
         bool getState() const;
 
         void setLabels(const juce::String& title,
@@ -25,6 +25,8 @@ namespace bm176
                        const juce::String& bottomLabel);
 
         void setCallback(std::function<void(bool)> cb);
+
+        std::function<void(bool)> onStateVisual;
 
         void timerCallback() override;
 
