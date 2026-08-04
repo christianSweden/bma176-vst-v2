@@ -19,10 +19,15 @@ namespace bm176
 
     void BMKnob::setIsBig(bool b)    { isBig = b; staticCacheValid = false; }
     void BMKnob::setDiscrete(bool d, int n) { isDiscrete = d; numPositions = juce::jmax(2, n); }
-    void BMKnob::setCentreDetent(bool c) { centreDetent = c; }
     void BMKnob::setVernierMode(bool v)   { isVernier = v; }
     void BMKnob::setAngleRange(float minDeg, float maxDeg) { minAngleDeg = minDeg; maxAngleDeg = maxDeg; staticCacheValid = false; }
     void BMKnob::setValueRange(float minV, float maxV) { minVal = minV; maxVal = maxV; }
+    void BMKnob::setDefaultValue(float v) { defaultValue = v; }
+
+    float BMKnob::dragValueRange() const
+    {
+        return isVernier ? 2.0f : (maxVal - minVal);
+    }
 
     float BMKnob::angleFromValue(float v) const
     {
@@ -47,7 +52,7 @@ namespace bm176
             static_cast<float>(juce::jlimit(0, n, idx)) / static_cast<float>(n) * 10.0f);
     }
 
-    void BMKnob::setValue(float newValue)
+    void BMKnob::setValue(float newValue, juce::NotificationType n)
     {
         if (isVernier)
             newValue = juce::jlimit(-1.0f, 1.0f, snapValue(newValue));
@@ -57,7 +62,7 @@ namespace bm176
         {
             value = newValue;
             repaint();
-            if (onValueChange)
+            if (n != juce::dontSendNotification && onValueChange)
                 onValueChange(value);
         }
     }
@@ -67,48 +72,48 @@ namespace bm176
     void BMKnob::mouseDown(const juce::MouseEvent& e)
     {
         dragStartValue = value;
-        dragStartY = e.getMouseDownY();
-
-        if (isDiscrete)
-        {
-            if (e.y < getHeight() * 0.5f)
-                setValue(value + 10.0f / static_cast<float>(numPositions - 1));
-            else
-                setValue(value - 10.0f / static_cast<float>(numPositions - 1));
-            snappedToDetent = true;
-        }
+        e.source.enableUnboundedMouseMovement(true);
+        setMouseCursor(juce::MouseCursor::NoCursor);
+        if (onDragStart) onDragStart();
     }
 
     void BMKnob::mouseDrag(const juce::MouseEvent& e)
     {
-        if (snappedToDetent) return;
-        float sensitivity = 10.0f / 260.0f;
-        if (e.mods.isCommandDown() || e.mods.isCtrlDown() || e.mods.isShiftDown())
-            sensitivity /= 5.0f;
-        const float delta = static_cast<float>(dragStartY - e.y) * sensitivity;
-        setValue(dragStartValue + delta);
+        float sensitivity = dragValueRange() / DRAG_PIXELS_FULL_RANGE;
+        if (e.mods.isShiftDown() || e.mods.isCommandDown() || e.mods.isCtrlDown())
+            sensitivity *= 0.2f;
+
+        setValue(dragStartValue - static_cast<float>(e.getDistanceFromDragStartY()) * sensitivity);
+    }
+
+    void BMKnob::mouseUp(const juce::MouseEvent&)
+    {
+        setMouseCursor(juce::MouseCursor::NormalCursor);
+        juce::Desktop::getInstance().getMainMouseSource()
+            .setScreenPosition(localPointToGlobal(getLocalBounds().toFloat().getCentre()));
+        if (onDragEnd) onDragEnd();
     }
 
     void BMKnob::mouseDoubleClick(const juce::MouseEvent&)
     {
-        setValue(5.0f);
+        if (onDragStart) onDragStart();
+        setValue(defaultValue);
+        if (onDragEnd) onDragEnd();
     }
 
-    void BMKnob::mouseWheelMove(const juce::MouseEvent&, const juce::MouseWheelDetails& d)
+    void BMKnob::mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& d)
     {
-        if (isDiscrete)
-        {
-            const float step = 10.0f / static_cast<float>(numPositions - 1);
-            if (d.deltaY > 0)
-                setValue(value + step);
-            else if (d.deltaY < 0)
-                setValue(value - step);
-        }
-        else
-        {
-            float s = 10.0f / 260.0f * 50.0f;
-            setValue(value + d.deltaY * s);
-        }
+        const float dy = ! juce::approximatelyEqual(d.deltaY, 0.0f) ? d.deltaY : d.deltaX;
+        if (juce::approximatelyEqual(dy, 0.0f)) return;
+        const float dir = dy > 0.0f ? 1.0f : -1.0f;
+
+        float step = isDiscrete ? 10.0f / static_cast<float>(numPositions - 1)
+                                : dragValueRange() / 50.0f;
+        if (e.mods.isShiftDown()) step *= 0.2f;
+
+        if (onDragStart) onDragStart();
+        setValue(value + dir * step);
+        if (onDragEnd) onDragEnd();
     }
 
     void BMKnob::resized()

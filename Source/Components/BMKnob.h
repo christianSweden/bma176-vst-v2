@@ -15,20 +15,23 @@ namespace bm176
 
         void mouseDown(const juce::MouseEvent& e) override;
         void mouseDrag(const juce::MouseEvent& e) override;
+        void mouseUp(const juce::MouseEvent& e) override;
         void mouseDoubleClick(const juce::MouseEvent& e) override;
         void mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& d) override;
 
-        void setValue(float newValue);
+        void setValue(float newValue, juce::NotificationType n = juce::sendNotification);
         float getValue() const;
+        void setDefaultValue(float v);
 
         void setIsBig(bool big);
         void setDiscrete(bool isDiscrete, int numPositions = 11);
-        void setCentreDetent(bool centre);
         void setVernierMode(bool vernier);
         void setAngleRange(float minDeg, float maxDeg);
         void setValueRange(float minV, float maxV);
 
+        std::function<void()>      onDragStart;
         std::function<void(float)> onValueChange;
+        std::function<void()>      onDragEnd;
 
     protected:
         virtual float snapValue(float raw) const;
@@ -38,16 +41,18 @@ namespace bm176
         bool  isDiscrete  = false;
         bool  isVernier   = false;
         int   numPositions = 11;
-        bool  centreDetent = false;
         float minAngleDeg  = -150.0f;
         float maxAngleDeg  =  150.0f;
         float minVal       = 0.0f;
         float maxVal       = 10.0f;
+        float defaultValue = 5.0f;
 
     private:
-        float dragStartValue = 0.0f;
-        int   dragStartY     = 0;
+        static constexpr float DRAG_PIXELS_FULL_RANGE = 300.0f;
 
+        float dragStartValue = 0.0f;
+
+        float dragValueRange() const;
         float angleFromValue(float v) const;
         float knobRadius() const;
 
@@ -61,7 +66,6 @@ namespace bm176
 
         void drawStaticLayers(juce::Graphics& g);
 
-        bool  snappedToDetent = false;
         juce::Image cachedStatic;
         bool staticCacheValid = false;
 
