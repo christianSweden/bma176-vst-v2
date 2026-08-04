@@ -156,7 +156,7 @@ namespace bm176
             juce::StringArray{"0", "2", "-2", "0"},
             juce::StringArray{"0", "-3", "-3", "0"}, 14.0f);
         drawKnobDotsAt(g, 1364.0f, 88.0f, 41.0f,
-            std::vector<float>{-150.0f, -120.0f, -90.0f, -67.5f, -45.0f, 0.0f, 45.0f, 67.5f, 90.0f, 120.0f, 150.0f},
+            std::vector<float>{-150.0f, -90.0f, -67.5f, -45.0f, 0.0f, 45.0f, 67.5f, 90.0f, 150.0f},
             3.25f, 1.236f);
         drawEndWords(g, 1364.0f, 88.0f, 41.0f, "OFF", "FAST");
 
@@ -170,15 +170,15 @@ namespace bm176
 
         drawDiscreteLabels(g, 196.0f, 103.0f, 41.0f,
             juce::StringArray{"I.5:I", "2:I", "4:I", "8:I", "I2:I"},
-            juce::StringArray{"-60", "-30", "0", "30", "60"}, true,
+            juce::StringArray{"-60", "-30", "0", "30", "60"}, false,
             juce::StringArray{"5", "-5", "-10", "-5", "5"});
         drawDiscreteLabels(g, 196.0f, 264.0f, 41.0f,
             juce::StringArray{"OFF", "45", "80", "I20", "I50", "200"},
-            juce::StringArray{"-75", "-45", "-15", "15", "45", "75"}, true,
-            juce::StringArray{"10", "0", "-10", "-10", "0", "10"});
+            juce::StringArray{"-75", "-45", "-15", "15", "45", "75"}, false,
+            juce::StringArray{"4", "0", "-4", "-4", "0", "4"});
         drawDiscreteLabels(g, 567.0f, 98.0f, 41.0f,
             juce::StringArray{"IN", "GR", "OUT"},
-            juce::StringArray{"-45", "0", "45"}, true,
+            juce::StringArray{"-45", "0", "45"}, false,
             juce::StringArray{"-10", "-10", "-10"});
 
         drawWordmark(g, 977.0f, 296.0f, 40.0f);
@@ -288,8 +288,8 @@ namespace bm176
                                      bool drawDots,
                                      const juce::StringArray& yOffsets)
     {
-        const float rx = 1.55f * R;
-        const float ry = 1.05f * R;
+        const float rx = 1.35f * R;
+        const float ry = 1.15f * R;
         g.setFont(juce::Font(juce::FontOptions().withHeight(12.0f)));
         g.setColour(textMain.withAlpha(0.80f));
         for (int i = 0; i < labels.size() && i < angles.size(); ++i)
