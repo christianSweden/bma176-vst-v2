@@ -1,4 +1,6 @@
 build/
+build_linux/
+build_vs/
 *.vst3/
 *.so
 *.a

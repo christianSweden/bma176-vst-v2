@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/christian/PluginDev/BM176/build_linux/vst3_helpers/BM176/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
