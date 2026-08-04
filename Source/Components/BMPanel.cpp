@@ -113,6 +113,7 @@ namespace bm176
         drawSectionLabel(g, 679.0f, 100.0f, 16.0f, "THRESHOLD");
         drawSectionLabel(g, 1253.0f, 118.0f, 13.0f, "INTERSTAGE");
         drawSectionLabel(g, 1253.0f, 140.0f, 12.0f, "IN");
+        drawSectionLabel(g, 1253.0f, 212.0f, 12.0f, "OUT");
         drawSectionLabel(g, 1253.0f, 252.0f, 12.0f, "ATTACK");
         drawSectionLabel(g, 1253.0f, 266.0f, 12.0f, "OFF");
         drawSectionLabel(g, 1364.0f,  24.0f, 16.0f, "ATTACK");
@@ -169,15 +170,15 @@ namespace bm176
 
         drawDiscreteLabels(g, 196.0f, 103.0f, 41.0f,
             juce::StringArray{"I.5:I", "2:I", "4:I", "8:I", "I2:I"},
-            juce::StringArray{"-60", "-30", "0", "30", "60"}, false,
+            juce::StringArray{"-60", "-30", "0", "30", "60"}, true,
             juce::StringArray{"5", "-5", "-10", "-5", "5"});
         drawDiscreteLabels(g, 196.0f, 264.0f, 41.0f,
             juce::StringArray{"OFF", "45", "80", "I20", "I50", "200"},
-            juce::StringArray{"-75", "-45", "-15", "15", "45", "75"}, false,
+            juce::StringArray{"-75", "-45", "-15", "15", "45", "75"}, true,
             juce::StringArray{"10", "0", "-10", "-10", "0", "10"});
         drawDiscreteLabels(g, 567.0f, 98.0f, 41.0f,
             juce::StringArray{"IN", "GR", "OUT"},
-            juce::StringArray{"-45", "0", "45"}, false,
+            juce::StringArray{"-45", "0", "45"}, true,
             juce::StringArray{"-10", "-10", "-10"});
 
         drawWordmark(g, 977.0f, 296.0f, 40.0f);

@@ -39,7 +39,6 @@ namespace bm176
         addAndMakeVisible(vuMeter);
 
         // === Interstage switch ===
-        interstageSwitch.setTitle("OUT");
         addAndMakeVisible(interstageSwitch);
 
         // === Attack OFF switch (maps to compressorOn) ===
@@ -100,7 +99,7 @@ namespace bm176
         outputBinder = std::make_unique<BMKnobBinder>(apvtsRef, "output", outputKnob);
         releaseBinder = std::make_unique<BMKnobBinder>(apvtsRef, "release", releaseKnob);
 
-        interstageBinder = std::make_unique<BMSwitchBinder>(apvtsRef, "interstage", interstageSwitch);
+        interstageBinder = std::make_unique<BMSwitchBinder>(apvtsRef, "interstage", interstageSwitch, true);
         attackOffBinder  = std::make_unique<BMSwitchBinder>(apvtsRef, "compressorOn", attackOffSwitch);
         bypassBinder     = std::make_unique<BMSwitchBinder>(apvtsRef, "bypass", bypassSwitch);
         powerBinder      = std::make_unique<BMSwitchBinder>(apvtsRef, "power", powerSwitch, true);

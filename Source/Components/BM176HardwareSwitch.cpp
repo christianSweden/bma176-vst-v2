@@ -28,12 +28,6 @@ namespace bm176
 
     void BM176HardwareSwitch::setCallback(std::function<void(bool)> cb) { onChange = std::move(cb); }
 
-    void BM176HardwareSwitch::setTitle(const juce::String& t)
-    {
-        title = t;
-        repaint();
-    }
-
     float BM176HardwareSwitch::slotTopY() const
     {
         return getHeight() * 0.45f;
@@ -179,12 +173,5 @@ namespace bm176
 
         g.setColour(screwBottom.darker(0.3f).withAlpha(0.4f));
         g.strokePath(actuator, juce::PathStrokeType(0.8f));
-
-        if (title.isNotEmpty())
-        {
-            g.setFont(juce::Font(juce::FontOptions().withHeight(9.0f)));
-            g.setColour(textMain.withAlpha(0.5f));
-            g.drawText(title, juce::Rectangle<float>(0.0f, 2.0f, w, 12.0f), juce::Justification::centred);
-        }
     }
 }

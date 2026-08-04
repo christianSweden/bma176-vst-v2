@@ -20,8 +20,6 @@ namespace bm176
         void setState(bool on, juce::NotificationType n = juce::sendNotification);
         bool getState() const;
 
-        void setTitle(const juce::String& title);
-
         void setCallback(std::function<void(bool)> cb);
 
         std::function<void(bool)> onStateVisual;
@@ -37,7 +35,6 @@ namespace bm176
         float dragOrigin = 0.0f;
         float dragY      = 0.0f;
 
-        juce::String title;
         std::function<void(bool)> onChange;
 
         float slotTopY() const;
