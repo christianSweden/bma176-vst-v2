@@ -7,7 +7,6 @@
 #include "../Components/BMPanel.h"
 #include "../Components/BMContinuousKnob.h"
 #include "../Components/BMDiscreteKnob.h"
-#include "../Components/BMToggleSwitch.h"
 #include "../Components/BM176HardwareSwitch.h"
 #include "../Components/BMVU.h"
 #include "../Components/BMLED.h"

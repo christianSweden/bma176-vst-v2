@@ -39,11 +39,10 @@ namespace bm176
         addAndMakeVisible(vuMeter);
 
         // === Interstage switch ===
-        interstageSwitch.setLabels("OUT", "", "IN");
+        interstageSwitch.setTitle("OUT");
         addAndMakeVisible(interstageSwitch);
 
         // === Attack OFF switch (maps to compressorOn) ===
-        attackOffSwitch.setLabels("", "OFF", "ON");
         addAndMakeVisible(attackOffSwitch);
 
         // === Attack (2-10 range, matches panel 2-8 + OFF switch) ===
@@ -63,14 +62,12 @@ namespace bm176
         addAndMakeVisible(releaseKnob);
 
         // === Bypass switch ===
-        bypassSwitch.setLabels("", "IN", "BYPASS");
         addAndMakeVisible(bypassSwitch);
 
         // === Power switch (decorative + disables audio when off) ===
         onLamp.setState(true);
         addAndMakeVisible(onLamp);
 
-        powerSwitch.setLabels("", "ON", "OFF");
         powerSwitch.onStateVisual = [this](bool on) { onLamp.setState(!on); };
         addAndMakeVisible(powerSwitch);
 
@@ -145,11 +142,6 @@ namespace bm176
             c.setBounds(juce::roundToInt(cx - d * 0.5f), juce::roundToInt(cy - d * 0.5f),
                         juce::roundToInt(d), juce::roundToInt(d));
         };
-        auto placeToggle = [&](juce::Component& c, float cx, float cy)
-        {
-            c.setBounds(juce::roundToInt(cx - 30.0f), juce::roundToInt(cy - 12.0f - 48.0f), 60, 96);
-        };
-
         placeCircle(ratioKnob,      196.0f, 103.0f, 82.0f);
         placeCircle(sidechainKnob,  196.0f, 264.0f, 82.0f);
         placeCircle(inputKnob,      376.0f, 171.0f, 158.0f);
@@ -168,7 +160,7 @@ namespace bm176
 
         placeSwitch(interstageSwitch, 1253.0f, 176.0f);
         placeSwitch(attackOffSwitch,  1253.0f, 303.0f);
-        bypassSwitch.setBounds(juce::roundToInt(1848.0f - 18.0f), juce::roundToInt(88.0f - 50.0f), 36, 100);
+        placeSwitch(bypassSwitch,     1848.0f,  88.0f);
         placeSwitch(powerSwitch,      1848.0f, 274.0f);
 
         vuMeter.setBounds(juce::roundToInt(VU_BEZEL_X), juce::roundToInt(VU_BEZEL_Y),

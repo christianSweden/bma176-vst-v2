@@ -26,8 +26,6 @@ juce_add_plugin(BM176
 
     Source/GUI/BM176Editor.h
     Source/GUI/BM176Editor.cpp
-    Source/GUI/BM176LookAndFeel.h
-    Source/GUI/BM176LookAndFeel.cpp
     Source/GUI/BM176Colours.h
     Source/GUI/BM176Geometry.h
     Source/GUI/BM176Fonts.h
@@ -42,8 +40,6 @@ juce_add_plugin(BM176
     Source/Components/BMDiscreteKnob.cpp
     Source/Components/BMContinuousKnob.h
     Source/Components/BMContinuousKnob.cpp
-    Source/Components/BMToggleSwitch.h
-    Source/Components/BMToggleSwitch.cpp
     Source/Components/BM176HardwareSwitch.h
     Source/Components/BM176HardwareSwitch.cpp
     Source/Components/BMVU.h
@@ -77,13 +73,11 @@ target_sources(BM176 PRIVATE
     Source/PluginProcessor.cpp
     Source/PluginEditor.cpp
     Source/GUI/BM176Editor.cpp
-    Source/GUI/BM176LookAndFeel.cpp
     Source/GUI/BMParameterBinder.cpp
     Source/Components/BMPanel.cpp
     Source/Components/BMKnob.cpp
     Source/Components/BMDiscreteKnob.cpp
     Source/Components/BMContinuousKnob.cpp
-    Source/Components/BMToggleSwitch.cpp
     Source/Components/BM176HardwareSwitch.cpp
     Source/Components/BMVU.cpp
     Source/Components/BMLED.cpp

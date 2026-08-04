@@ -36,24 +36,4 @@ namespace bm176
     inline constexpr float PANEL_TEXT_SIZE       = 16.0f;
     inline constexpr float PANEL_TEXT_SMALL      = 13.0f;
     inline constexpr float PANEL_TEXT_LARGE      = 18.0f;
-
-    inline juce::AffineTransform getScaleTransform(int targetWidth, int targetHeight)
-    {
-        const float sx = static_cast<float>(targetWidth)  / static_cast<float>(DESIGN_WIDTH);
-        const float sy = static_cast<float>(targetHeight) / static_cast<float>(DESIGN_HEIGHT);
-        const float s = juce::jmin(sx, sy);
-        return juce::AffineTransform::scale(s);
-    }
-
-    inline juce::Rectangle<float> getDesignBounds(int targetWidth, int targetHeight)
-    {
-        const float sx = static_cast<float>(targetWidth)  / static_cast<float>(DESIGN_WIDTH);
-        const float sy = static_cast<float>(targetHeight) / static_cast<float>(DESIGN_HEIGHT);
-        const float s = juce::jmin(sx, sy);
-        const float dw = static_cast<float>(DESIGN_WIDTH)  * s;
-        const float dh = static_cast<float>(DESIGN_HEIGHT) * s;
-        const float ox = (static_cast<float>(targetWidth)  - dw) * 0.5f;
-        const float oy = (static_cast<float>(targetHeight) - dh) * 0.5f;
-        return juce::Rectangle<float>(ox, oy, dw, dh);
-    }
 }

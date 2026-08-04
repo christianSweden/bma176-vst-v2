@@ -28,13 +28,9 @@ namespace bm176
 
     void BM176HardwareSwitch::setCallback(std::function<void(bool)> cb) { onChange = std::move(cb); }
 
-    void BM176HardwareSwitch::setLabels(const juce::String& t,
-                                        const juce::String& top,
-                                        const juce::String& bottom)
+    void BM176HardwareSwitch::setTitle(const juce::String& t)
     {
         title = t;
-        topLabel = top;
-        bottomLabel = bottom;
         repaint();
     }
 
