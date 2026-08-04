@@ -4,7 +4,7 @@
 
 namespace bm176
 {
-    inline const juce::Colour panelBase       { 0xff1a1b1d };
+    inline const juce::Colour panelBase       { 0xff35373b };
     inline const juce::Colour panelDeep       { 0xff0c0d0f };
     inline const juce::Colour panelEdgeHi     { 0xff4a4c50 };
     inline const juce::Colour panelGrooveOuter{ 0xff43464a };
