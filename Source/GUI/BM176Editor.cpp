@@ -11,12 +11,12 @@ namespace bm176
 
         // === Ratio (discrete, 5 positions) ===
         ratioKnob.setDiscrete(true, 5);
-        ratioKnob.setAngleRange(-75.0f, 75.0f);
+        ratioKnob.setAngleRange(-60.0f, 60.0f);
         addAndMakeVisible(ratioKnob);
 
         // === Sidechain HP (discrete, 6 positions) ===
         sidechainKnob.setDiscrete(true, 6);
-        sidechainKnob.setAngleRange(-90.0f, 90.0f);
+        sidechainKnob.setAngleRange(-75.0f, 75.0f);
         addAndMakeVisible(sidechainKnob);
 
         // === Input (big, 21 detents) ===
@@ -26,7 +26,7 @@ namespace bm176
 
         // === Meter mode (discrete, 3 positions) ===
         meterKnob.setDiscrete(true, 3);
-        meterKnob.setAngleRange(-60.0f, 60.0f);
+        meterKnob.setAngleRange(-45.0f, 45.0f);
         addAndMakeVisible(meterKnob);
 
         // === Vernier In (-1 to 1, centre detent) ===
