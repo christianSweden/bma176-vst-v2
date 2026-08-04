@@ -233,10 +233,10 @@ void BM176AudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::M
                      "PROC  | OUT=%.2f dBFS", rmsDb);
             OutputDebugStringA(buf);
 #else
-            std::printf("PROC  | vi=%.1f(%d) vo=%.1f(%d) sc=%s cmp=%s | vern=%.2fdB anchor=+%.2f\n",
+            std::printf("PROC  | vi=%.1f(%d) vo=%.1f(%d) sc=%s cmp=%s | vern=%.2fdB anchor=+3.95\n",
                         inputVernierVal, (int)((inputVernierVal + 1.0f) * 5.0f + 0.5f),
                         outputVernierVal, (int)((outputVernierVal + 1.0f) * 5.0f + 0.5f),
-                        scLabel, cmpLabel, vernierDb, kGainAnchorDb);
+                        scLabel, cmpLabel, vernierDb);
             std::printf("PROC  | OUT=%.2f dBFS\n", rmsDb);
 #endif
         }
