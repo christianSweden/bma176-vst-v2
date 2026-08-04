@@ -6,7 +6,6 @@ namespace bm176
     BM176HardwareSwitch::BM176HardwareSwitch()
     {
         setRepaintsOnMouseActivity(false);
-        startTimerHz(60);
     }
 
     BM176HardwareSwitch::~BM176HardwareSwitch() { stopTimer(); }
@@ -70,6 +69,7 @@ namespace bm176
     void BM176HardwareSwitch::mouseDrag(const juce::MouseEvent& e)
     {
         if (!dragging) return;
+        startTimerHz(60);
         const float delta = e.y - dragY;
         actuatorY = clampSlot(dragOrigin + delta * 0.5f);
         repaint();
@@ -103,6 +103,9 @@ namespace bm176
         {
             actuatorY = targetY;
             velocity = 0.0f;
+            stopTimer();
+            repaint();
+            return;
         }
 
         if (std::abs(actuatorY - prevY) > 0.05f)

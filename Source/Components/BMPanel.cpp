@@ -5,9 +5,13 @@
 
 namespace bm176
 {
-    BMPanel::BMPanel() {}
+    BMPanel::BMPanel() { setOpaque(true); }
 
-    void BMPanel::resized() { textureBuilt = false; }
+    void BMPanel::resized()
+    {
+        textureBuilt = false;
+        panelCacheValid = false;
+    }
 
     void BMPanel::buildTexture()
     {
@@ -38,6 +42,20 @@ namespace bm176
     }
 
     void BMPanel::paint(juce::Graphics& g)
+    {
+        if (! panelCacheValid
+            || cachedPanel.getWidth()  != getWidth()
+            || cachedPanel.getHeight() != getHeight())
+        {
+            cachedPanel = juce::Image(juce::Image::RGB, getWidth(), getHeight(), false);
+            juce::Graphics cg(cachedPanel);
+            drawPanelArtwork(cg);
+            panelCacheValid = true;
+        }
+        g.drawImageAt(cachedPanel, 0, 0);
+    }
+
+    void BMPanel::drawPanelArtwork(juce::Graphics& g)
     {
         const float w = static_cast<float>(getWidth());
         const float h = static_cast<float>(getHeight());

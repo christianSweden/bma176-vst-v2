@@ -6,10 +6,15 @@ namespace bm176
 {
     inline constexpr float DEG2RAD = juce::MathConstants<float>::pi / 180.0f;
 
-    BMVU::BMVU()  { setRepaintsOnMouseActivity(false); startTimerHz(30); }
+    BMVU::BMVU()  { setRepaintsOnMouseActivity(false); }
     BMVU::~BMVU() { stopTimer(); }
 
-    void BMVU::setTargetDB(float dB) { targetDB = juce::jlimit(-20.0f, 3.0f, dB); }
+    void BMVU::setTargetDB(float dB)
+    {
+        targetDB = juce::jlimit(-20.0f, 3.0f, dB);
+        if (! juce::approximatelyEqual(targetDB, displayDB))
+            startTimerHz(30);
+    }
     void BMVU::setMode(bool gr)      { grMode = gr; }
 
     float BMVU::pctToAngle(float pct) const
@@ -40,6 +45,8 @@ namespace bm176
         {
             displayDB = targetDB;
             velocity = 0.0f;
+            stopTimer();
+            repaint();
         }
         else
         {

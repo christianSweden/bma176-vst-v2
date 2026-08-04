@@ -19,7 +19,7 @@ BM176AudioProcessorEditor::BM176AudioProcessorEditor(BM176AudioProcessor& p)
         [&p]() { return p.getInputLevelDb(); },
         [&p]() { return p.getOutputLevelDb(); });
 
-    startTimerHz(24);
+    startTimerHz(30);
 }
 
 BM176AudioProcessorEditor::~BM176AudioProcessorEditor()

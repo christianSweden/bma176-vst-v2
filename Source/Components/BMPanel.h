@@ -15,7 +15,11 @@ namespace bm176
         juce::Image brushedTexture;
         bool textureBuilt = false;
 
+        juce::Image cachedPanel;
+        bool panelCacheValid = false;
+
         void buildTexture();
+        void drawPanelArtwork(juce::Graphics& g);
 
         void drawSectionLabel(juce::Graphics& g, float cx, float cy, float sizeH,
                              const juce::String& text);
