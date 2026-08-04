@@ -42,7 +42,9 @@ void BM176AudioProcessorEditor::resized()
     const float ox = (static_cast<float>(getWidth())  - w) * 0.5f;
     const float oy = (static_cast<float>(getHeight()) - h) * 0.5f;
 
-    editor.setTransform(juce::AffineTransform::scale(scale));
-    editor.setBounds(juce::roundToInt(ox), juce::roundToInt(oy),
-                     juce::roundToInt(w), juce::roundToInt(h));
+    // Editor keeps its full design-space logical size so all child bounds
+    // (set in design coordinates) stay within its own paint clip; scale and
+    // centring are applied purely via the transform.
+    editor.setBounds(0, 0, bm176::DESIGN_WIDTH, bm176::DESIGN_HEIGHT);
+    editor.setTransform(juce::AffineTransform::scale(scale).translated(ox, oy));
 }
