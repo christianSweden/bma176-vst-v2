@@ -3,6 +3,11 @@
 
 namespace bm176
 {
+    namespace
+    {
+        constexpr float kSwitchDragThreshold = 3.0f; // px; slotTravel() is 12px, so this stays well below a real drag
+    }
+
     BM176HardwareSwitch::BM176HardwareSwitch()
     {
         setRepaintsOnMouseActivity(false);
@@ -51,6 +56,7 @@ namespace bm176
     void BM176HardwareSwitch::mouseDown(const juce::MouseEvent& e)
     {
         dragging = true;
+        didDrag = false;
         dragOrigin = actuatorY;
         dragY = e.y;
         setState(!state);
@@ -59,18 +65,29 @@ namespace bm176
     void BM176HardwareSwitch::mouseDrag(const juce::MouseEvent& e)
     {
         if (!dragging) return;
+
+        if (!didDrag && std::abs(e.getDistanceFromDragStartY()) >= kSwitchDragThreshold)
+            didDrag = true;
+
+        if (!didDrag) return;
+
         startTimerHz(60);
         const float delta = e.y - dragY;
         actuatorY = clampSlot(dragOrigin + delta * 0.5f);
         repaint();
     }
 
-    void BM176HardwareSwitch::mouseUp(const juce::MouseEvent& e)
+    void BM176HardwareSwitch::mouseUp(const juce::MouseEvent&)
     {
         dragging = false;
 
-        const float midpoint = (slotTopY() + slotBottomY()) * 0.5f;
-        setState(actuatorY > midpoint);
+        if (didDrag)
+        {
+            const float midpoint = (slotTopY() + slotBottomY()) * 0.5f;
+            setState(actuatorY > midpoint);
+        }
+        // Plain click: mouseDown's toggle stands; the spring timer (already
+        // started inside setState) animates actuatorY to targetY on its own.
     }
 
     void BM176HardwareSwitch::timerCallback()

@@ -34,6 +34,7 @@ namespace bm176
         bool  dragging  = false;
         float dragOrigin = 0.0f;
         float dragY      = 0.0f;
+        bool  didDrag    = false;   // true once real drag motion exceeds the click threshold
 
         std::function<void(bool)> onChange;
 
