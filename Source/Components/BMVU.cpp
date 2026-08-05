@@ -296,8 +296,9 @@ namespace bm176
     void BMVU::drawNeedle(juce::Graphics& g)
     {
         constexpr float Rtick = 268.0f;
+        // GR mode uses the same dB sign convention as level mode (0 dB idle,
+        // negative = more reduction), so no inversion is needed here.
         float pct = 100.0f * std::pow(10.0f, displayDB / 20.0f);
-        if (grMode) pct = 100.0f - pct;
         pct = juce::jlimit(0.0f, 150.0f, pct);
         const float angleDeg = pctToAngle(pct);
         const float angleRad = angleDeg * DEG2RAD;

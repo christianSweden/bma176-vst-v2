@@ -23,7 +23,7 @@ namespace bm176
         float targetDB  = 0.0f;
         float displayDB = 0.0f;
         float velocity  = 0.0f;
-        bool  grMode    = false;
+        bool  grMode    = false;   // currently unused by drawNeedle() (GR/level share the same dB convention); kept for future GR-specific visual treatment
 
         void drawBezel(juce::Graphics& g);
         void drawGlassRecess(juce::Graphics& g);
